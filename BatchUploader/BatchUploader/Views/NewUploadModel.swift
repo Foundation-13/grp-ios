@@ -9,12 +9,9 @@ import Foundation
 import Combine
 import UIKit
 
-final class Model: ObservableObject {
-    
+final class NewUploadModel: ObservableObject {
     @Published var readyForUpload = false
     @Published var selectedImages: [UIImage] = []
-    
-    @Published var state = ""
     
     func upload() {
         guard !selectedImages.isEmpty else { return }
@@ -23,7 +20,7 @@ final class Model: ObservableObject {
     }
 }
 
-extension Model: ImagePickerDelegate {
+extension NewUploadModel: ImagePickerDelegate {
     func imagePicker(_ picker: ImagePickerView, didSelectImage image: UIImage) {
         selectedImages.append(image)
         readyForUpload = true

@@ -1,17 +1,19 @@
 //
-//  ContentView.swift
+//  NewUploadView.swift
 //  BatchUploader
 //
-//  Created by Eugen Fedchenko on 13.08.2020.
+//  Created by Eugen Fedchenko on 14.08.2020.
+//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
 //
 
 import SwiftUI
 
-struct ContentView: View {
-    @ObservedObject var model: Model
+
+struct NewUploadView: View {
+    @Binding var isShown: Bool
+    @ObservedObject var model: NewUploadModel
     
     @State var openPicker = false
-    @State var image: UIImage?
     
     var body: some View {
         VStack {
@@ -38,9 +40,14 @@ struct ContentView: View {
             .padding(.vertical, 20)
             
             Button("Start upload") {
-                
+                self.isShown = false
             }
             .disabled(!model.readyForUpload)
+            .padding(.vertical, 20)
+            
+            Button("Cancel") {
+                self.isShown = false
+            }
             .padding(.vertical, 20)
             
             Spacer()
@@ -49,12 +56,5 @@ struct ContentView: View {
         .sheet(isPresented: $openPicker, content: {
             ImagePickerView(delegate: self.model)
         })
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static let model = Model()
-    static var previews: some View {
-        ContentView(model: model)
     }
 }

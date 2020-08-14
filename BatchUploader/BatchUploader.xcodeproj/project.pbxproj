@@ -9,17 +9,19 @@
 /* Begin PBXBuildFile section */
 		46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450924E5E16F0053CD7E /* AppDelegate.swift */; };
 		46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */; };
-		46A1450E24E5E16F0053CD7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* ContentView.swift */; };
+		46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* MainView.swift */; };
 		46A1451024E5E1710053CD7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46A1450F24E5E1710053CD7E /* Assets.xcassets */; };
 		46A1451324E5E1710053CD7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46A1451224E5E1710053CD7E /* Preview Assets.xcassets */; };
 		46A1451624E5E1710053CD7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46A1451424E5E1710053CD7E /* LaunchScreen.storyboard */; };
 		46A1452124E5E1710053CD7E /* BatchUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1452024E5E1710053CD7E /* BatchUploaderTests.swift */; };
 		46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1452B24E5E19A0053CD7E /* ImagePickerView.swift */; };
-		46A1452E24E5E19A0053CD7E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1452C24E5E19A0053CD7E /* Model.swift */; };
+		46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1452C24E5E19A0053CD7E /* NewUploadModel.swift */; };
 		46A1453324E5E5C40053CD7E /* Uploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453224E5E5C40053CD7E /* Uploader.swift */; };
 		46A1453624E658540053CD7E /* UploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453524E658540053CD7E /* UploadManager.swift */; };
 		46A1453824E65CCA0053CD7E /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453724E65CCA0053CD7E /* Storage.swift */; };
 		46A1453A24E66BC40053CD7E /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453924E66BC40053CD7E /* StorageTests.swift */; };
+		46A1453C24E689140053CD7E /* NewUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453B24E689140053CD7E /* NewUploadView.swift */; };
+		46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1453E24E68DF90053CD7E /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +38,7 @@
 		46A1450624E5E16F0053CD7E /* BatchUploader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BatchUploader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46A1450924E5E16F0053CD7E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		46A1450D24E5E16F0053CD7E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		46A1450D24E5E16F0053CD7E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		46A1450F24E5E1710053CD7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46A1451224E5E1710053CD7E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		46A1451524E5E1710053CD7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -45,11 +47,13 @@
 		46A1452024E5E1710053CD7E /* BatchUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchUploaderTests.swift; sourceTree = "<group>"; };
 		46A1452224E5E1710053CD7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		46A1452B24E5E19A0053CD7E /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
-		46A1452C24E5E19A0053CD7E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		46A1452C24E5E19A0053CD7E /* NewUploadModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewUploadModel.swift; sourceTree = "<group>"; };
 		46A1453224E5E5C40053CD7E /* Uploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uploader.swift; sourceTree = "<group>"; };
 		46A1453524E658540053CD7E /* UploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadManager.swift; sourceTree = "<group>"; };
 		46A1453724E65CCA0053CD7E /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		46A1453924E66BC40053CD7E /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
+		46A1453B24E689140053CD7E /* NewUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUploadView.swift; sourceTree = "<group>"; };
+		46A1453E24E68DF90053CD7E /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,12 +95,10 @@
 		46A1450824E5E16F0053CD7E /* BatchUploader */ = {
 			isa = PBXGroup;
 			children = (
+				46A1453D24E68DAD0053CD7E /* Views */,
 				46A1453424E656B20053CD7E /* Uploader */,
-				46A1452B24E5E19A0053CD7E /* ImagePickerView.swift */,
-				46A1452C24E5E19A0053CD7E /* Model.swift */,
 				46A1450924E5E16F0053CD7E /* AppDelegate.swift */,
 				46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */,
-				46A1450D24E5E16F0053CD7E /* ContentView.swift */,
 				46A1450F24E5E1710053CD7E /* Assets.xcassets */,
 				46A1451424E5E1710053CD7E /* LaunchScreen.storyboard */,
 				46A1451724E5E1710053CD7E /* Info.plist */,
@@ -131,6 +133,18 @@
 				46A1453724E65CCA0053CD7E /* Storage.swift */,
 			);
 			path = Uploader;
+			sourceTree = "<group>";
+		};
+		46A1453D24E68DAD0053CD7E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				46A1452B24E5E19A0053CD7E /* ImagePickerView.swift */,
+				46A1452C24E5E19A0053CD7E /* NewUploadModel.swift */,
+				46A1453B24E689140053CD7E /* NewUploadView.swift */,
+				46A1450D24E5E16F0053CD7E /* MainView.swift */,
+				46A1453E24E68DF90053CD7E /* MainViewModel.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,13 +253,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				46A1453824E65CCA0053CD7E /* Storage.swift in Sources */,
-				46A1452E24E5E19A0053CD7E /* Model.swift in Sources */,
+				46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */,
 				46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */,
 				46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */,
 				46A1453324E5E5C40053CD7E /* Uploader.swift in Sources */,
+				46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */,
 				46A1453624E658540053CD7E /* UploadManager.swift in Sources */,
 				46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */,
-				46A1450E24E5E16F0053CD7E /* ContentView.swift in Sources */,
+				46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */,
+				46A1453C24E689140053CD7E /* NewUploadView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
