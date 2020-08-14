@@ -16,7 +16,13 @@ final class NewUploadModel: ObservableObject {
     func upload() {
         guard !selectedImages.isEmpty else { return }
         
-        
+        do {
+            let id = "u-\(UUID().uuidString)"
+            try UploadManager.shared.startNewUpload(id: id, images: selectedImages)
+            print("Upload started with id: \(id)")
+        } catch let err {
+            print("failed to start upload: \(err)")
+        }
     }
 }
 

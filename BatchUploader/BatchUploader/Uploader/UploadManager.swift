@@ -10,7 +10,8 @@ import UIKit
 import Combine
 
 enum UploadError: Error {
-    
+    case convertToPNG
+    case jobNotFound
 }
 
 struct UploadProgress {
@@ -25,10 +26,41 @@ enum UploadEvent {
     case failed(String, UploadError)
 }
 
+
 final class UploadManager {
     
-    func startNewUpload(id: String, images: [UIImage]) {
+    static let shared: UploadManager = UploadManager(storage: Storage(), jobsDB: DummyJobsDB(), uploader: DummyUploader())
+    
+    init(storage: StorageProviver, jobsDB: JobsDBProvider, uploader: ImageUploader) {
+        self.storage = storage
+        self.jobsDB = jobsDB
+        self.uploader = uploader
         
+        queue.maxConcurrentOperationCount = 1
+    }
+    
+    func startNewUpload(id: String, images: [UIImage]) throws {
+        // create folder and copy files
+        try storage.makeFolder(path: "/uploads/\(id)")
+        
+        var steps = [String]()
+        for (indx, img) in images.enumerated() {
+            let fileName = "/uploads/\(id)/\(indx)"
+            guard let data = img.pngData() else {
+                throw UploadError.convertToPNG
+            }
+            
+            try storage.writeFile(path: fileName, data: data)
+            steps.append("\(indx)")
+        }
+        
+        // save upload into the db
+        jobsDB.createJob(id: id, steps: steps)
+        
+        // start upload task
+        for indx in 0..<images.count {
+            queue.addOperation(UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader))
+        }
     }
     
     func currentUploads() -> [UploadProgress] {
@@ -41,4 +73,11 @@ final class UploadManager {
     
     // MARK:- private
     private let uploadSubject = PassthroughSubject<UploadEvent, Never>()
+    
+    private let storage: StorageProviver
+    private let uploader: ImageUploader
+    private let jobsDB: JobsDBProvider
+    
+    private let queue = OperationQueue()
 }
+

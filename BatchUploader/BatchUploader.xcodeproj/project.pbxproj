@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4620684324E701740083D8A7 /* JobsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684224E701740083D8A7 /* JobsDB.swift */; };
+		4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684624E7076B0083D8A7 /* ImageUploader.swift */; };
+		4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684824E70D830083D8A7 /* UploadOperation.swift */; };
 		46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450924E5E16F0053CD7E /* AppDelegate.swift */; };
 		46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */; };
 		46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* MainView.swift */; };
@@ -35,6 +38,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4620684224E701740083D8A7 /* JobsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsDB.swift; sourceTree = "<group>"; };
+		4620684624E7076B0083D8A7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		4620684824E70D830083D8A7 /* UploadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadOperation.swift; sourceTree = "<group>"; };
 		46A1450624E5E16F0053CD7E /* BatchUploader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BatchUploader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46A1450924E5E16F0053CD7E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +137,9 @@
 			children = (
 				46A1453524E658540053CD7E /* UploadManager.swift */,
 				46A1453724E65CCA0053CD7E /* Storage.swift */,
+				4620684224E701740083D8A7 /* JobsDB.swift */,
+				4620684624E7076B0083D8A7 /* ImageUploader.swift */,
+				4620684824E70D830083D8A7 /* UploadOperation.swift */,
 			);
 			path = Uploader;
 			sourceTree = "<group>";
@@ -256,9 +265,12 @@
 				46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */,
 				46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */,
 				46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */,
+				4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */,
 				46A1453324E5E5C40053CD7E /* Uploader.swift in Sources */,
+				4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */,
 				46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */,
 				46A1453624E658540053CD7E /* UploadManager.swift in Sources */,
+				4620684324E701740083D8A7 /* JobsDB.swift in Sources */,
 				46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */,
 				46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */,
 				46A1453C24E689140053CD7E /* NewUploadView.swift in Sources */,

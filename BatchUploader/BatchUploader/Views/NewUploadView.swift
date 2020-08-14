@@ -40,6 +40,7 @@ struct NewUploadView: View {
             .padding(.vertical, 20)
             
             Button("Start upload") {
+                self.model.upload()
                 self.isShown = false
             }
             .disabled(!model.readyForUpload)
