@@ -11,8 +11,16 @@ import Combine
 
 final class MainViewModel: ObservableObject {
     
+    init() {
+        self.cancellable = UploadManager.shared.uploadEvents.sink(receiveValue: { (event) in
+            print("received upload event: \(event)")
+        })
+    }
+    
     func newUploadModel() -> NewUploadModel {
         return NewUploadModel()
     }
+    
+    private var cancellable: AnyCancellable?
     
 }

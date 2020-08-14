@@ -21,6 +21,7 @@ struct UploadProgress {
 }
 
 enum UploadEvent {
+    case started(String)
     case progress(UploadProgress)
     case completed(String)
     case failed(String, UploadError)
@@ -37,6 +38,8 @@ final class UploadManager {
         self.uploader = uploader
         
         queue.maxConcurrentOperationCount = 1
+        
+        
     }
     
     func startNewUpload(id: String, images: [UIImage]) throws {
@@ -59,7 +62,25 @@ final class UploadManager {
         
         // start upload task
         for indx in 0..<images.count {
-            queue.addOperation(UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader))
+            let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader)
+            operation.completionBlock = { [weak self] in
+                guard let self = self else { return }
+                
+                guard let status = self.jobsDB.getJobStatus(id: id) else {
+                    // something bad happened
+                    return
+                }
+                
+                if status.remaining.isEmpty {
+                    self.jobsDB.completeJob(id: id)
+                    self.updateProgress(.completed(id))
+                } else {
+                    let p = UploadProgress(id: id, total: status.completed.count + status.remaining.count, uploaded: status.completed.count)
+                    self.updateProgress(.progress(p))
+                }
+            }
+            
+            queue.addOperation(operation)
         }
     }
     
@@ -72,6 +93,12 @@ final class UploadManager {
     }
     
     // MARK:- private
+    func updateProgress(_ e: UploadEvent) {
+        DispatchQueue.main.async {
+            self.uploadSubject.send(e)
+        }
+    }
+    
     private let uploadSubject = PassthroughSubject<UploadEvent, Never>()
     
     private let storage: StorageProviver

@@ -34,7 +34,7 @@ final class DummyJobsDB: JobsDBProvider {
     func markCompleted(step: String, forJob id: String) throws {
         guard let job = jobs[id] else { throw UploadError.jobNotFound }
         
-        print("job \(id), step \(id) completed")
+        print("job \(id), step \(step) completed")
         
         if let stepIndex = job.remaining.firstIndex(of: step) {
             var completed = job.completed
