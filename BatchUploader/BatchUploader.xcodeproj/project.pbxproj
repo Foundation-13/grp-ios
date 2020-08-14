@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4620684324E701740083D8A7 /* JobsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684224E701740083D8A7 /* JobsDB.swift */; };
 		4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684624E7076B0083D8A7 /* ImageUploader.swift */; };
 		4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684824E70D830083D8A7 /* UploadOperation.swift */; };
+		4620684C24E724D50083D8A7 /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4620684B24E724D50083D8A7 /* PromiseKit */; };
 		46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450924E5E16F0053CD7E /* AppDelegate.swift */; };
 		46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */; };
 		46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* MainView.swift */; };
@@ -67,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4620684C24E724D50083D8A7 /* PromiseKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +175,7 @@
 			);
 			name = BatchUploader;
 			packageProductDependencies = (
+				4620684B24E724D50083D8A7 /* PromiseKit */,
 			);
 			productName = BatchUploader;
 			productReference = 46A1450624E5E16F0053CD7E /* BatchUploader.app */;
@@ -225,6 +228,7 @@
 			);
 			mainGroup = 46A144FD24E5E16F0053CD7E;
 			packageReferences = (
+				4620684A24E724D50083D8A7 /* XCRemoteSwiftPackageReference "PromiseKit" */,
 			);
 			productRefGroup = 46A1450724E5E16F0053CD7E /* Products */;
 			projectDirPath = "";
@@ -539,6 +543,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4620684A24E724D50083D8A7 /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/PromiseKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.13.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4620684B24E724D50083D8A7 /* PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4620684A24E724D50083D8A7 /* XCRemoteSwiftPackageReference "PromiseKit" */;
+			productName = PromiseKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46A144FE24E5E16F0053CD7E /* Project object */;
 }

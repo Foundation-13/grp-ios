@@ -46,7 +46,6 @@ final class UploadManager {
         // create folder and copy files
         try storage.makeFolder(path: "/uploads/\(id)")
         
-        var steps = [String]()
         for (indx, img) in images.enumerated() {
             let fileName = "/uploads/\(id)/\(indx)"
             guard let data = img.pngData() else {
@@ -54,11 +53,10 @@ final class UploadManager {
             }
             
             try storage.writeFile(path: fileName, data: data)
-            steps.append("\(indx)")
         }
         
         // save upload into the db
-        jobsDB.createJob(id: id, steps: steps)
+        try jobsDB.createJob(id: id, steps: images.count)
         
         // start upload task
         for indx in 0..<images.count {
@@ -66,17 +64,20 @@ final class UploadManager {
             operation.completionBlock = { [weak self] in
                 guard let self = self else { return }
                 
-                guard let status = self.jobsDB.getJobStatus(id: id) else {
-                    // something bad happened
-                    return
-                }
-                
-                if status.remaining.isEmpty {
-                    self.jobsDB.completeJob(id: id)
-                    self.updateProgress(.completed(id))
-                } else {
-                    let p = UploadProgress(id: id, total: status.completed.count + status.remaining.count, uploaded: status.completed.count)
-                    self.updateProgress(.progress(p))
+                do {
+                    guard let status = self.jobsDB.getJobStatus(id: id) else {
+                        throw UploadError.jobNotFound
+                    }
+                    
+                    if status.remaining == 0 {
+                        try self.jobsDB.completeJob(id: id)
+                        self.updateProgress(.completed(id))
+                    } else {
+                        let p = UploadProgress(id: id, total: status.total, uploaded: status.completed)
+                        self.updateProgress(.progress(p))
+                    }
+                } catch let err {
+                    print("something bad in completion block \(err)")
                 }
             }
             

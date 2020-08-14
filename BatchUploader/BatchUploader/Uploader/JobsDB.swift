@@ -9,45 +9,41 @@
 import Foundation
 
 struct JobStatus {
-    let completed: [String]
-    let remaining: [String]
+    let completed: Int
+    let total: Int
+    
+    var remaining: Int { total - completed }
 }
 
 protocol JobsDBProvider {
-    func createJob(id: String, steps: [String])
+    func createJob(id: String, steps: Int)  throws
     
-    func markCompleted(step: String, forJob id: String) throws
-    func completeJob(id: String)
+    func markStepCompleted(forJob id: String) throws
     func getJobStatus(id: String) -> JobStatus?
     
+    func completeJob(id: String) throws
     
     func getActiveJobs() -> [String]
 }
 
 // MARK:- Implementation
 final class DummyJobsDB: JobsDBProvider {
-    func createJob(id: String, steps: [String]) {
+    
+    func createJob(id: String, steps: Int) throws {
         print("created job \(id), steps \(steps)")
-        jobs[id] = JobStatus(completed: [], remaining: steps)
+        jobs[id] = JobStatus(completed: 0, total: steps)
     }
     
-    func markCompleted(step: String, forJob id: String) throws {
+    func markStepCompleted(forJob id: String) throws {
         guard let job = jobs[id] else { throw UploadError.jobNotFound }
         
-        print("job \(id), step \(step) completed")
+        let newStatus = JobStatus(completed: job.completed + 1, total: job.total)
+        print("job \(id), new status \(newStatus)")
         
-        if let stepIndex = job.remaining.firstIndex(of: step) {
-            var completed = job.completed
-            var remaining = job.remaining
-            
-            completed.append(step)
-            remaining.remove(at: stepIndex)
-            
-            jobs[id] = JobStatus(completed: completed, remaining: remaining)
-        }
+        jobs[id] = newStatus
     }
     
-    func completeJob(id: String) {
+    func completeJob(id: String) throws {
         print("job \(id) completed")
         jobs.removeValue(forKey: id)
     }
