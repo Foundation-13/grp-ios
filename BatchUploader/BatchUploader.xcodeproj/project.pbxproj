@@ -11,6 +11,8 @@
 		4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684624E7076B0083D8A7 /* ImageUploader.swift */; };
 		4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684824E70D830083D8A7 /* UploadOperation.swift */; };
 		4620684C24E724D50083D8A7 /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4620684B24E724D50083D8A7 /* PromiseKit */; };
+		4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */; };
+		4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620685024E7A6AC0083D8A7 /* LoadingView.swift */; };
 		46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450924E5E16F0053CD7E /* AppDelegate.swift */; };
 		46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */; };
 		46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* MainView.swift */; };
@@ -42,6 +44,8 @@
 		4620684224E701740083D8A7 /* JobsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsDB.swift; sourceTree = "<group>"; };
 		4620684624E7076B0083D8A7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		4620684824E70D830083D8A7 /* UploadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadOperation.swift; sourceTree = "<group>"; };
+		4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		4620685024E7A6AC0083D8A7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		46A1450624E5E16F0053CD7E /* BatchUploader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BatchUploader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46A1450924E5E16F0053CD7E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4620684D24E7A66E0083D8A7 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */,
+				4620685024E7A6AC0083D8A7 /* LoadingView.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
 		46A144FD24E5E16F0053CD7E = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +162,7 @@
 		46A1453D24E68DAD0053CD7E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4620684D24E7A66E0083D8A7 /* Controls */,
 				46A1452B24E5E19A0053CD7E /* ImagePickerView.swift */,
 				46A1452C24E5E19A0053CD7E /* NewUploadModel.swift */,
 				46A1453B24E689140053CD7E /* NewUploadView.swift */,
@@ -269,9 +283,11 @@
 				46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */,
 				46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */,
 				46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */,
+				4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */,
 				4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */,
 				46A1453324E5E5C40053CD7E /* Uploader.swift in Sources */,
 				4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */,
+				4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */,
 				46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */,
 				46A1453624E658540053CD7E /* UploadManager.swift in Sources */,
 				4620684324E701740083D8A7 /* JobsDB.swift in Sources */,

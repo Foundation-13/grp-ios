@@ -22,7 +22,7 @@ final class UploadOperation: Operation {
         do {
             let data = try storage.readFile(path: "/uploads/\(jobId)/\(index)")
             uploader.uploadImage(data, index: index, forJob: jobId)
-            try db.markStepCompleted(forJob: jobId)
+            try db.markStepCompleted(index, forJob: jobId)
         } catch let err {
             print("failed to upload \(err)")
         }

@@ -7,15 +7,13 @@
 //
 
 import SwiftUI
-
+import PromiseKit
 
 struct NewUploadView: View {
-    @Binding var isShown: Bool
     @ObservedObject var model: NewUploadModel
-    
     @State var openPicker = false
     
-    var body: some View {
+    var content: some View {
         VStack {
             Group {
                 if self.model.selectedImages.isEmpty  {
@@ -41,21 +39,21 @@ struct NewUploadView: View {
             
             Button("Start upload") {
                 self.model.upload()
-                self.isShown = false
             }
             .disabled(!model.readyForUpload)
             .padding(.vertical, 20)
-            
-            Button("Cancel") {
-                self.isShown = false
-            }
-            .padding(.vertical, 20)
-            
+                        
             Spacer()
         }
-        .padding()
+        .padding(.top, 20)
         .sheet(isPresented: $openPicker, content: {
             ImagePickerView(delegate: self.model)
         })
+    }
+    
+    var body: some View {
+        LoadingView(isShowing: self.model.isLoading) {
+            self.content
+        }
     }
 }

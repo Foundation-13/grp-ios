@@ -16,11 +16,7 @@ final class MainViewModel: ObservableObject {
             print("received upload event: \(event)")
         })
     }
-    
-    func newUploadModel() -> NewUploadModel {
-        return NewUploadModel()
-    }
-    
+        
     private var cancellable: AnyCancellable?
     
 }

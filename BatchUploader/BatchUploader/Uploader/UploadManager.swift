@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import PromiseKit
 
 enum UploadError: Error {
     case convertToPNG
@@ -21,6 +22,7 @@ struct UploadProgress {
 }
 
 enum UploadEvent {
+    case starting(String)
     case started(String)
     case progress(UploadProgress)
     case completed(String)
@@ -38,50 +40,15 @@ final class UploadManager {
         self.uploader = uploader
         
         queue.maxConcurrentOperationCount = 1
-        
-        
     }
     
-    func startNewUpload(id: String, images: [UIImage]) throws {
-        // create folder and copy files
-        try storage.makeFolder(path: "/uploads/\(id)")
-        
-        for (indx, img) in images.enumerated() {
-            let fileName = "/uploads/\(id)/\(indx)"
-            guard let data = img.pngData() else {
-                throw UploadError.convertToPNG
-            }
-            
-            try storage.writeFile(path: fileName, data: data)
-        }
-        
-        // save upload into the db
-        try jobsDB.createJob(id: id, steps: images.count)
-        
-        // start upload task
-        for indx in 0..<images.count {
-            let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader)
-            operation.completionBlock = { [weak self] in
-                guard let self = self else { return }
-                
-                do {
-                    guard let status = self.jobsDB.getJobStatus(id: id) else {
-                        throw UploadError.jobNotFound
-                    }
-                    
-                    if status.remaining == 0 {
-                        try self.jobsDB.completeJob(id: id)
-                        self.updateProgress(.completed(id))
-                    } else {
-                        let p = UploadProgress(id: id, total: status.total, uploaded: status.completed)
-                        self.updateProgress(.progress(p))
-                    }
-                } catch let err {
-                    print("something bad in completion block \(err)")
-                }
-            }
-            
-            queue.addOperation(operation)
+    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void> {
+        return firstly {
+            prepareFolderForJob(id: id, images: images)
+        }.then(on: self.bgq) {
+            self.saveJob(id: id, steps: images.count)
+        }.then(on: self.bgq) {
+            self.startJob(id: id, steps: images.count)
         }
     }
     
@@ -94,11 +61,71 @@ final class UploadManager {
     }
     
     // MARK:- private
-    func updateProgress(_ e: UploadEvent) {
+    private func updateProgress(_ e: UploadEvent) {
         DispatchQueue.main.async {
             self.uploadSubject.send(e)
         }
     }
+    
+    private func prepareFolderForJob(id: String, images: [UIImage]) -> Promise<Void> {
+        return Promise().then(on: bgq) { _ -> Promise<Void> in
+            self.updateProgress(.starting(id))
+            
+            // create folder and copy files
+            try self.storage.makeFolder(path: "/uploads/\(id)")
+            
+            for (indx, img) in images.enumerated() {
+                let fileName = "/uploads/\(id)/\(indx)"
+                guard let data = img.pngData() else {
+                    throw UploadError.convertToPNG
+                }
+                
+                try self.storage.writeFile(path: fileName, data: data)
+            }
+            
+            return Promise()
+        }
+    }
+    
+    private func saveJob(id: String, steps: Int) -> Promise<Void> {
+        return Promise { seal in
+            try self.jobsDB.createJob(id: id, steps: steps)
+            seal.fulfill(())
+        }
+    }
+    
+    private func startJob(id: String, steps: Int) -> Promise<Void> {
+        return Promise { seal in
+            for indx in 0..<steps {
+                let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader)
+                operation.completionBlock = { [weak self] in
+                    guard let self = self else { return }
+                    
+                    do {
+                        guard let status = self.jobsDB.getJobStatus(id: id) else {
+                            throw UploadError.jobNotFound
+                        }
+                        
+                        let p = UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
+                        self.updateProgress(.progress(p))
+                        
+                        if status.isFinished {
+                            try self.jobsDB.completeJob(id: id)
+                            self.updateProgress(.completed(id))
+                        }
+                    } catch let err {
+                        print("something bad in completion block \(err)")
+                    }
+                }
+                
+                queue.addOperation(operation)
+            }
+            
+            seal.fulfill(())
+        }
+    }
+    
+    // MARK:- private
     
     private let uploadSubject = PassthroughSubject<UploadEvent, Never>()
     
@@ -107,5 +134,7 @@ final class UploadManager {
     private let jobsDB: JobsDBProvider
     
     private let queue = OperationQueue()
+    
+    private let bgq = DispatchQueue.global(qos: .userInitiated)
 }
 

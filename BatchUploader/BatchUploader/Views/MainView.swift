@@ -12,18 +12,25 @@ struct MainView: View {
     @State var openNewUpload = false
     
     var body: some View {
-        VStack {
-            Text("No active uploads")
-            
-            Button("Create new upload") {
-                self.openNewUpload = true
+        NavigationView {
+            VStack {
+                
+                VStack {
+                    Text("No active uploads")
+                }.padding(.vertical, 20)
+                
+                Button("Create new upload") {
+                    self.openNewUpload = true
+                }
+                
+                Spacer()
+                
+                NavigationLink(destination: NewUploadView(model: NewUploadModel(isActive: self.$openNewUpload)), isActive: self.$openNewUpload) {
+                    EmptyView()
+                }
             }
+            .padding()
         }
-        .padding()
-        .sheet(isPresented: $openNewUpload, content: {
-            NewUploadView(isShown: self.$openNewUpload, model: self.model.newUploadModel())
-        })
-
     }
 }
 
