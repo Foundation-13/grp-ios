@@ -18,11 +18,11 @@ struct UploadViewState: Identifiable {
     var id: String { return name }
     
     var progress: Float {
-        if completedSteps == 0 {
+        if totalSteps == 0 {
             return 0.0
         }
         
-        return Float(totalSteps) / Float(completedSteps)
+        return Float(completedSteps) / Float(totalSteps)
     }
 }
 

@@ -20,12 +20,15 @@ struct MainView: View {
                         Text("No active uploads")
                     }.padding(.vertical, 20)
                 } else {
-                    List {
-                        ForEach(self.model.uploads) { (upload) in
-                            VStack {
-                                Text(upload.name)
+                    ScrollView {
+                        VStack {
+                            ForEach(self.model.uploads) { (upload) in
+                                VStack {
+                                    Text(upload.name)
+                                    ProgressBar(value: .constant(upload.progress))
+                                    Divider()
+                                }
                             }
-                            ProgressBar(value: .constant(upload.progress))
                         }
                     }.frame(height: 200)
                 }

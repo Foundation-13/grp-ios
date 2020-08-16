@@ -19,6 +19,10 @@ final class NewUploadModel: ObservableObject {
     @Published var isLoading = false
     @Published var selectedImages: [UIImage] = []
     
+    deinit {
+        print("NewUploadModel deinit")
+    }
+    
     func upload() {
         guard !selectedImages.isEmpty else { return }
         
@@ -29,6 +33,7 @@ final class NewUploadModel: ObservableObject {
         }.then { id in
             Upload.manager.startNewUpload(id: id, images: self.selectedImages)
         }.done {
+            print("upload started, close window")
             self.isActive.wrappedValue = false
         }.catch { (err) in
             print("Fuck!!! \(err)")
