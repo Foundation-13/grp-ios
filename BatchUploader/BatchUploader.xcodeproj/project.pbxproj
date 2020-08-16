@@ -14,6 +14,9 @@
 		4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */; };
 		4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620685024E7A6AC0083D8A7 /* LoadingView.swift */; };
 		46866A6D24E91D8F0091E585 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46866A6C24E91D8F0091E585 /* ProgressView.swift */; };
+		46866A7024E9328F0091E585 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 46866A6F24E9328F0091E585 /* GRDB */; };
+		46866A7324E933C80091E585 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46866A7224E933C80091E585 /* Provider.swift */; };
+		46866A7524E935610091E585 /* DummyJobsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46866A7424E935610091E585 /* DummyJobsDB.swift */; };
 		46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450924E5E16F0053CD7E /* AppDelegate.swift */; };
 		46A1450C24E5E16F0053CD7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */; };
 		46A1450E24E5E16F0053CD7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A1450D24E5E16F0053CD7E /* MainView.swift */; };
@@ -47,6 +50,8 @@
 		4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		4620685024E7A6AC0083D8A7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		46866A6C24E91D8F0091E585 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		46866A7224E933C80091E585 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		46866A7424E935610091E585 /* DummyJobsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyJobsDB.swift; sourceTree = "<group>"; };
 		46A1450624E5E16F0053CD7E /* BatchUploader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BatchUploader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46A1450924E5E16F0053CD7E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +78,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4620684C24E724D50083D8A7 /* PromiseKit in Frameworks */,
+				46866A7024E9328F0091E585 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +100,16 @@
 				46866A6C24E91D8F0091E585 /* ProgressView.swift */,
 			);
 			path = Controls;
+			sourceTree = "<group>";
+		};
+		46866A7124E933A60091E585 /* JobsDB */ = {
+			isa = PBXGroup;
+			children = (
+				4620684224E701740083D8A7 /* JobsDB.swift */,
+				46866A7224E933C80091E585 /* Provider.swift */,
+				46866A7424E935610091E585 /* DummyJobsDB.swift */,
+			);
+			path = JobsDB;
 			sourceTree = "<group>";
 		};
 		46A144FD24E5E16F0053CD7E = {
@@ -150,9 +166,9 @@
 		46A1453424E656B20053CD7E /* Uploader */ = {
 			isa = PBXGroup;
 			children = (
+				46866A7124E933A60091E585 /* JobsDB */,
 				46A1453524E658540053CD7E /* UploadManager.swift */,
 				46A1453724E65CCA0053CD7E /* Storage.swift */,
-				4620684224E701740083D8A7 /* JobsDB.swift */,
 				4620684624E7076B0083D8A7 /* ImageUploader.swift */,
 				4620684824E70D830083D8A7 /* UploadOperation.swift */,
 			);
@@ -190,6 +206,7 @@
 			name = BatchUploader;
 			packageProductDependencies = (
 				4620684B24E724D50083D8A7 /* PromiseKit */,
+				46866A6F24E9328F0091E585 /* GRDB */,
 			);
 			productName = BatchUploader;
 			productReference = 46A1450624E5E16F0053CD7E /* BatchUploader.app */;
@@ -243,6 +260,7 @@
 			mainGroup = 46A144FD24E5E16F0053CD7E;
 			packageReferences = (
 				4620684A24E724D50083D8A7 /* XCRemoteSwiftPackageReference "PromiseKit" */,
+				46866A6E24E9328F0091E585 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			productRefGroup = 46A1450724E5E16F0053CD7E /* Products */;
 			projectDirPath = "";
@@ -283,11 +301,13 @@
 				46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */,
 				46866A6D24E91D8F0091E585 /* ProgressView.swift in Sources */,
 				46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */,
+				46866A7324E933C80091E585 /* Provider.swift in Sources */,
 				46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */,
 				4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */,
 				4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */,
 				4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */,
 				4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */,
+				46866A7524E935610091E585 /* DummyJobsDB.swift in Sources */,
 				46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */,
 				46A1453624E658540053CD7E /* UploadManager.swift in Sources */,
 				4620684324E701740083D8A7 /* JobsDB.swift in Sources */,
@@ -569,6 +589,14 @@
 				minimumVersion = 6.13.2;
 			};
 		};
+		46866A6E24E9328F0091E585 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.14.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -576,6 +604,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4620684A24E724D50083D8A7 /* XCRemoteSwiftPackageReference "PromiseKit" */;
 			productName = PromiseKit;
+		};
+		46866A6F24E9328F0091E585 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46866A6E24E9328F0091E585 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

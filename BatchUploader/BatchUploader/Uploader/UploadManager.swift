@@ -14,8 +14,6 @@ import PromiseKit
 enum Upload {
     enum Err: Error {
         case convertToPNG
-        case jobNotFound(String)
-        case stepNotFound(jod: String, step: Int)
     }
 
     struct Progress {
@@ -106,9 +104,7 @@ final class UploadManager {
                     guard let self = self else { return }
                     
                     do {
-                        guard let status = self.jobsDB.getJobStatus(id: id) else {
-                            throw Upload.Err.jobNotFound(id)
-                        }
+                        let status = try self.jobsDB.getJobStatus(id: id)
                         
                         let p = Upload.Progress(id: id, total: status.totalCount, uploaded: status.completedCount)
                         self.updateProgress(.progress(p))

@@ -1,42 +1,13 @@
 //
-//  UploadsDB.swift
+//  DummyJobsDB.swift
 //  BatchUploader
 //
-//  Created by Eugen Fedchenko on 14.08.2020.
+//  Created by Eugen Fedchenko on 16.08.2020.
 //  Copyright © 2020 Eugen Fedchenko. All rights reserved.
 //
 
 import Foundation
 
-struct JobStatus {
-    let completed: [Int]
-    let remaining: [Int]
-    
-    var totalCount: Int {
-        return completed.count + remaining.count
-    }
-    
-    var completedCount: Int {
-        return completed.count
-    }
-    
-    var isFinished: Bool {
-        return remaining.isEmpty
-    }
-}
-
-protocol JobsDBProvider {
-    func createJob(id: String, steps: Int)  throws
-    
-    func markStepCompleted(_ step: Int, forJob id: String) throws
-    func getJobStatus(id: String) -> JobStatus?
-    
-    func completeJob(id: String) throws
-    
-    func getActiveJobs() -> [String]
-}
-
-// MARK:- Implementation
 final class DummyJobsDB: JobsDBProvider {
     
     func createJob(id: String, steps: Int) throws {
@@ -48,8 +19,8 @@ final class DummyJobsDB: JobsDBProvider {
     
     func markStepCompleted(_ step: Int, forJob id: String) throws {
         try performWithLock {
-            guard let job = jobs[id] else { throw Upload.Err.jobNotFound(id) }
-            guard let index = job.remaining.firstIndex(of: step) else { throw Upload.Err.stepNotFound(jod: id, step: step) }
+            guard let job = jobs[id] else { throw JobDBErr.jobNotFound(id: id) }
+            guard let index = job.remaining.firstIndex(of: step) else { throw JobDBErr.stepNotFound(job: id, step: step) }
             
             var newCompleted = job.completed
             var newRemaining = job.remaining
@@ -70,8 +41,9 @@ final class DummyJobsDB: JobsDBProvider {
         }
     }
     
-    func getJobStatus(id: String) -> JobStatus? {
-        return jobs[id]
+    func getJobStatus(id: String) throws -> JobStatus {
+        guard let job = jobs[id] else { throw JobDBErr.jobNotFound(id: id) }
+        return job
     }
     
     func getActiveJobs() -> [String] {
