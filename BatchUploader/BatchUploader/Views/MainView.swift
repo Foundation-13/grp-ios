@@ -15,9 +15,20 @@ struct MainView: View {
         NavigationView {
             VStack {
                 
-                VStack {
-                    Text("No active uploads")
-                }.padding(.vertical, 20)
+                if self.model.uploads.isEmpty {
+                    VStack {
+                        Text("No active uploads")
+                    }.padding(.vertical, 20)
+                } else {
+                    List {
+                        ForEach(self.model.uploads) { (upload) in
+                            VStack {
+                                Text(upload.name)
+                            }
+                            ProgressBar(value: .constant(upload.progress))
+                        }
+                    }.frame(height: 200)
+                }
                 
                 Button("Create new upload") {
                     self.openNewUpload = true

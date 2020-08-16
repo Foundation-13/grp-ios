@@ -47,24 +47,27 @@ final class DummyJobsDB: JobsDBProvider {
     }
     
     func markStepCompleted(_ step: Int, forJob id: String) throws {
-        guard let job = jobs[id] else { throw UploadError.jobNotFound }
-        
-        if let index = job.remaining.firstIndex(of: step) {
+        try performWithLock {
+            guard let job = jobs[id] else { throw Upload.Err.jobNotFound(id) }
+            guard let index = job.remaining.firstIndex(of: step) else { throw Upload.Err.stepNotFound(jod: id, step: step) }
+            
             var newCompleted = job.completed
             var newRemaining = job.remaining
-            
+                
             newCompleted.append(step)
             newRemaining.remove(at: index)
-            
+                
             let newStatus = JobStatus(completed: newCompleted, remaining: newRemaining)
             print("job \(id), new status \(newStatus)")
             jobs[id] = newStatus
-        } // TODO: job not found!
+        }
     }
     
     func completeJob(id: String) throws {
-        print("job \(id) completed")
-        jobs.removeValue(forKey: id)
+        try performWithLock {
+            print("job \(id) completed")
+            jobs.removeValue(forKey: id)
+        }
     }
     
     func getJobStatus(id: String) -> JobStatus? {
@@ -75,5 +78,14 @@ final class DummyJobsDB: JobsDBProvider {
         return Array<String>(jobs.keys)
     }
     
+    // MARK:- private
+    
+    private func performWithLock(_ fn: () throws -> Void) throws {
+        defer { lock.unlock() }
+        lock.lock()
+        try fn()
+    }
+    
     private var jobs = [String: JobStatus]()
+    private let lock = NSLock()
 }

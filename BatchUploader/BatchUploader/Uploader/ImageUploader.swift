@@ -17,6 +17,6 @@ protocol ImageUploader {
 struct DummyUploader: ImageUploader {
     func uploadImage(_ data: Data, index: Int, forJob id: String) {
         print("upload image \(index) for job \(id)")
-        sleep(1)
+        sleep(2)
     }
 }

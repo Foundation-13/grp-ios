@@ -15,10 +15,6 @@ final class NewUploadModel: ObservableObject {
         self.isActive = isActive
     }
     
-    deinit {
-        print("NewUploadModel deinit")
-    }
-    
     @Published var readyForUpload = false
     @Published var isLoading = false
     @Published var selectedImages: [UIImage] = []
@@ -31,7 +27,7 @@ final class NewUploadModel: ObservableObject {
         firstly {
             createRecordOnServer()
         }.then { id in
-            UploadManager.shared.startNewUpload(id: id, images: self.selectedImages)
+            Upload.manager.startNewUpload(id: id, images: self.selectedImages)
         }.done {
             self.isActive.wrappedValue = false
         }.catch { (err) in
