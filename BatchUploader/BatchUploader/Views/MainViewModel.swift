@@ -30,7 +30,9 @@ struct UploadViewState: Identifiable {
 final class MainViewModel: ObservableObject {
     
     init() {
-        self.cancellable = Upload.manager.uploadEvents.sink(receiveValue: { [weak self] (event) in
+        self.manager = ServicesAssemble.shared.uploadManager
+        
+        self.cancellable = manager.uploadEvents.sink(receiveValue: { [weak self] (event) in
             guard let self = self else { return }
             print("received upload event: \(event)")
             
@@ -57,7 +59,7 @@ final class MainViewModel: ObservableObject {
     func viewDidAppear() {
         visible = true
         do {
-            let currentUploads = try Upload.manager.currentUploads()
+            let currentUploads = try manager.currentUploads()
             self.uploads = currentUploads.map {
                 UploadViewState(name: $0.id, status: "In progress", totalSteps: $0.total, completedSteps: $0.uploaded)
             }
@@ -73,7 +75,7 @@ final class MainViewModel: ObservableObject {
     @Published var uploads = [UploadViewState]()
     
     // MARK:- private
-    
+    private let manager: UploadManager
     private var cancellable: AnyCancellable?
     private var visible = false
     
@@ -85,7 +87,7 @@ final class MainViewModel: ObservableObject {
         uploads = uploads.removedFirst { $0.id == id }
     }
     
-    private func progress(_ p: Upload.Progress) {
+    private func progress(_ p: UploadProgress) {
         uploads = uploads.map {
             if $0.id == p.id {
                 return UploadViewState(name: $0.id, status: "In progress", totalSteps: p.total, completedSteps: p.uploaded)

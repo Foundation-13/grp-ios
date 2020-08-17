@@ -14,7 +14,7 @@ protocol ImageUploader {
 
 // MARK:- Implementation
 
-struct DummyUploader: ImageUploader {
+struct DummyImageUploader: ImageUploader {
     func uploadImage(_ data: Data, index: Int, forJob id: String) {
         print("upload image \(index) for job \(id)")
         sleep(2)

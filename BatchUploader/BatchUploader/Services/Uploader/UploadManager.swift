@@ -10,27 +10,27 @@ import UIKit
 import Combine
 import PromiseKit
 
+enum UploadErr: Error {
+    case convertToPNG
+}
 
-enum Upload {
-    enum Err: Error {
-        case convertToPNG
-    }
+struct UploadProgress {
+    let id: String
+    let total: Int
+    let uploaded: Int
+}
 
-    struct Progress {
-        let id: String
-        let total: Int
-        let uploaded: Int
-    }
+enum UploadEvent {
+    case starting(String)
+    case started(String)
+    case progress(UploadProgress)
+    case completed(String)
+    case failed(String, UploadErr)
+}
 
-    enum Event {
-        case starting(String)
-        case started(String)
-        case progress(Progress)
-        case completed(String)
-        case failed(String, Err)
-    }
-
-    static let manager: UploadManager = UploadManager(storage: Storage(), jobsDB: DummyJobsDB(), uploader: DummyUploader())
+protocol UploadProvider {
+    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void>
+    func currentUploads() -> Promise<[UploadProgress]>
 }
 
 
@@ -54,20 +54,20 @@ final class UploadManager {
         }
     }
     
-    func currentUploads() throws -> [Upload.Progress] {
+    func currentUploads() throws -> [UploadProgress] {
         let jobs = jobsDB.getActiveJobs()
-        return try jobs.map { (id) throws -> Upload.Progress in
+        return try jobs.map { (id) throws -> UploadProgress in
             let status = try self.jobsDB.getJobStatus(id: id)
-            return Upload.Progress(id: id, total: status.totalCount, uploaded: status.completedCount)
+            return UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
         }
     }
     
-    var uploadEvents: AnyPublisher<Upload.Event, Never> {
+    var uploadEvents: AnyPublisher<UploadEvent, Never> {
         return uploadSubject.eraseToAnyPublisher()
     }
     
     // MARK:- private
-    private func updateProgress(_ e: Upload.Event) {
+    private func updateProgress(_ e: UploadEvent) {
         DispatchQueue.main.async {
             self.uploadSubject.send(e)
         }
@@ -83,7 +83,7 @@ final class UploadManager {
             for (indx, img) in images.enumerated() {
                 let fileName = "/uploads/\(id)/\(indx)"
                 guard let data = img.pngData() else {
-                    throw Upload.Err.convertToPNG
+                    throw UploadErr.convertToPNG
                 }
                 
                 try self.storage.writeFile(path: fileName, data: data)
@@ -110,7 +110,7 @@ final class UploadManager {
                     do {
                         let status = try self.jobsDB.getJobStatus(id: id)
                         
-                        let p = Upload.Progress(id: id, total: status.totalCount, uploaded: status.completedCount)
+                        let p = UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
                         self.updateProgress(.progress(p))
                         
                         if status.isFinished {
@@ -131,7 +131,7 @@ final class UploadManager {
     
     // MARK:- private
     
-    private let uploadSubject = PassthroughSubject<Upload.Event, Never>()
+    private let uploadSubject = PassthroughSubject<UploadEvent, Never>()
     
     private let storage: StorageProviver
     private let uploader: ImageUploader

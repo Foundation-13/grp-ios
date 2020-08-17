@@ -14,6 +14,8 @@
 		4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */; };
 		4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620685024E7A6AC0083D8A7 /* LoadingView.swift */; };
 		462EAC8524EA60D800E3CCD3 /* ArrayEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462EAC8424EA60D800E3CCD3 /* ArrayEx.swift */; };
+		462EAC8824EA6DEA00E3CCD3 /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462EAC8724EA6DEA00E3CCD3 /* Wrapper.swift */; };
+		462EAC8A24EA719E00E3CCD3 /* ServicesAssemble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462EAC8924EA719E00E3CCD3 /* ServicesAssemble.swift */; };
 		46866A6D24E91D8F0091E585 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46866A6C24E91D8F0091E585 /* ProgressView.swift */; };
 		46866A7024E9328F0091E585 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 46866A6F24E9328F0091E585 /* GRDB */; };
 		46866A7324E933C80091E585 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46866A7224E933C80091E585 /* Provider.swift */; };
@@ -51,6 +53,8 @@
 		4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		4620685024E7A6AC0083D8A7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		462EAC8424EA60D800E3CCD3 /* ArrayEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayEx.swift; sourceTree = "<group>"; };
+		462EAC8724EA6DEA00E3CCD3 /* Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wrapper.swift; sourceTree = "<group>"; };
+		462EAC8924EA719E00E3CCD3 /* ServicesAssemble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssemble.swift; sourceTree = "<group>"; };
 		46866A6C24E91D8F0091E585 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		46866A7224E933C80091E585 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		46866A7424E935610091E585 /* DummyJobsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyJobsDB.swift; sourceTree = "<group>"; };
@@ -112,6 +116,14 @@
 			path = Foundation;
 			sourceTree = "<group>";
 		};
+		462EAC8624EA6DC200E3CCD3 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				462EAC8724EA6DEA00E3CCD3 /* Wrapper.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		46866A7124E933A60091E585 /* JobsDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +137,9 @@
 		46866A7624EA5A530091E585 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				462EAC8624EA6DC200E3CCD3 /* Database */,
 				46A1453424E656B20053CD7E /* Uploader */,
+				462EAC8924EA719E00E3CCD3 /* ServicesAssemble.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -317,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46A1453824E65CCA0053CD7E /* Storage.swift in Sources */,
+				462EAC8A24EA719E00E3CCD3 /* ServicesAssemble.swift in Sources */,
 				46A1452E24E5E19A0053CD7E /* NewUploadModel.swift in Sources */,
 				46866A6D24E91D8F0091E585 /* ProgressView.swift in Sources */,
 				46A1452D24E5E19A0053CD7E /* ImagePickerView.swift in Sources */,
@@ -325,6 +340,7 @@
 				4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */,
 				4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */,
 				4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */,
+				462EAC8824EA6DEA00E3CCD3 /* Wrapper.swift in Sources */,
 				4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */,
 				46866A7524E935610091E585 /* DummyJobsDB.swift in Sources */,
 				46A1453F24E68DF90053CD7E /* MainViewModel.swift in Sources */,

@@ -35,7 +35,7 @@ final class NewUploadModel: ObservableObject {
         firstly {
             createRecordOnServer()
         }.then { id in
-            Upload.manager.startNewUpload(id: id, images: self.selectedImages)
+            ServicesAssemble.shared.uploadManager.startNewUpload(id: id, images: self.selectedImages)
         }.ensure {
             self.isLoading = false
         }.done {
