@@ -36,13 +36,7 @@ struct NewUploadView: View {
                 self.openPicker = true
             }
             .padding(.vertical, 20)
-            
-            Button("Start upload") {
-                self.model.upload()
-            }
-            .disabled(!model.readyForUpload)
-            .padding(.vertical, 20)
-                        
+                                    
             Spacer()
         }
         .padding(.top, 20)
@@ -52,8 +46,19 @@ struct NewUploadView: View {
     }
     
     var body: some View {
-        LoadingView(isShowing: self.model.isLoading) {
+        LoadingView(isShowing: model.isLoading){
             self.content
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading:
+                Button("Cancel") {
+                    self.model.cancel()
+                },
+            trailing:
+                Button("Upload") {
+                    self.model.upload()
+                }.disabled(!model.readyForUpload)
+        )
     }
 }

@@ -44,6 +44,12 @@ struct MainView: View {
                 }
             }
             .padding()
+            .onAppear {
+                self.model.viewDidAppear()
+            }
+            .onDisappear {
+                self.model.viewDidDisappear()
+            }
         }
     }
 }

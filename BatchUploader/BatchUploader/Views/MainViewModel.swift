@@ -32,8 +32,12 @@ final class MainViewModel: ObservableObject {
     init() {
         self.cancellable = Upload.manager.uploadEvents.sink(receiveValue: { [weak self] (event) in
             guard let self = self else { return }
-            
             print("received upload event: \(event)")
+            
+            if !self.visible {
+                return
+            }
+            
             switch event {
             case .starting(let id):
                 self.addNewUpload(id: id)
@@ -50,9 +54,28 @@ final class MainViewModel: ObservableObject {
         })
     }
     
+    func viewDidAppear() {
+        visible = true
+        do {
+            let currentUploads = try Upload.manager.currentUploads()
+            self.uploads = currentUploads.map {
+                UploadViewState(name: $0.id, status: "In progress", totalSteps: $0.total, completedSteps: $0.uploaded)
+            }
+        } catch let err {
+            print("failed to read current uploads: \(err)")
+        }
+    }
+    
+    func viewDidDisappear() {
+        visible = false
+    }
+    
     @Published var uploads = [UploadViewState]()
     
+    // MARK:- private
+    
     private var cancellable: AnyCancellable?
+    private var visible = false
     
     private func addNewUpload(id: String) {
         var v = uploads
@@ -61,7 +84,11 @@ final class MainViewModel: ObservableObject {
     }
     
     private func completeUpload(id: String) {
-        
+        var v = uploads
+        if let indx = v.firstIndex(where: { $0.id == id}) {
+            v.remove(at: indx)
+            uploads = v
+        }
     }
     
     private func progress(_ p: Upload.Progress) {

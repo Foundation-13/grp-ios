@@ -112,6 +112,14 @@
 			path = JobsDB;
 			sourceTree = "<group>";
 		};
+		46866A7624EA5A530091E585 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				46A1453424E656B20053CD7E /* Uploader */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		46A144FD24E5E16F0053CD7E = {
 			isa = PBXGroup;
 			children = (
@@ -133,8 +141,8 @@
 		46A1450824E5E16F0053CD7E /* BatchUploader */ = {
 			isa = PBXGroup;
 			children = (
+				46866A7624EA5A530091E585 /* Services */,
 				46A1453D24E68DAD0053CD7E /* Views */,
-				46A1453424E656B20053CD7E /* Uploader */,
 				46A1450924E5E16F0053CD7E /* AppDelegate.swift */,
 				46A1450B24E5E16F0053CD7E /* SceneDelegate.swift */,
 				46A1450F24E5E1710053CD7E /* Assets.xcassets */,

@@ -54,8 +54,12 @@ final class UploadManager {
         }
     }
     
-    func currentUploads() -> [Upload.Progress] {
-        return []
+    func currentUploads() throws -> [Upload.Progress] {
+        let jobs = jobsDB.getActiveJobs()
+        return try jobs.map { (id) throws -> Upload.Progress in
+            let status = try self.jobsDB.getJobStatus(id: id)
+            return Upload.Progress(id: id, total: status.totalCount, uploaded: status.completedCount)
+        }
     }
     
     var uploadEvents: AnyPublisher<Upload.Event, Never> {

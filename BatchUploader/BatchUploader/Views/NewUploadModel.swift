@@ -23,6 +23,10 @@ final class NewUploadModel: ObservableObject {
         print("NewUploadModel deinit")
     }
     
+    func cancel() {
+        self.isActive.wrappedValue = false
+    }
+    
     func upload() {
         guard !selectedImages.isEmpty else { return }
         
@@ -32,6 +36,8 @@ final class NewUploadModel: ObservableObject {
             createRecordOnServer()
         }.then { id in
             Upload.manager.startNewUpload(id: id, images: self.selectedImages)
+        }.ensure {
+            self.isLoading = false
         }.done {
             print("upload started, close window")
             self.isActive.wrappedValue = false
