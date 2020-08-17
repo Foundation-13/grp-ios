@@ -78,17 +78,11 @@ final class MainViewModel: ObservableObject {
     private var visible = false
     
     private func addNewUpload(id: String) {
-        var v = uploads
-        v.append(UploadViewState(name: id, status: "Starting", totalSteps: 0, completedSteps: 0))
-        uploads = v 
+        uploads = uploads.with(newElement: UploadViewState(name: id, status: "Starting", totalSteps: 0, completedSteps: 0))
     }
     
     private func completeUpload(id: String) {
-        var v = uploads
-        if let indx = v.firstIndex(where: { $0.id == id}) {
-            v.remove(at: indx)
-            uploads = v
-        }
+        uploads = uploads.removedFirst { $0.id == id }
     }
     
     private func progress(_ p: Upload.Progress) {
