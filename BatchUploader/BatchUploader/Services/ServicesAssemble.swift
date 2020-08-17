@@ -14,7 +14,7 @@ final class ServicesAssemble {
     
     static let shared = ServicesAssemble()
     
-    lazy var uploadManager: UploadManager = {
+    lazy var uploadProvider: UploadProvider = {
         return UploadManager(storage: storage, jobsDB: jobsDB, uploader: imageUploader)
     }()
     

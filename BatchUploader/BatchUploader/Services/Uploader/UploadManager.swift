@@ -10,30 +10,6 @@ import UIKit
 import Combine
 import PromiseKit
 
-enum UploadErr: Error {
-    case convertToPNG
-}
-
-struct UploadProgress {
-    let id: String
-    let total: Int
-    let uploaded: Int
-}
-
-enum UploadEvent {
-    case starting(String)
-    case started(String)
-    case progress(UploadProgress)
-    case completed(String)
-    case failed(String, UploadErr)
-}
-
-protocol UploadProvider {
-    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void>
-    func currentUploads() -> Promise<[UploadProgress]>
-}
-
-
 final class UploadManager {
     
     init(storage: StorageProviver, jobsDB: JobsDBProvider, uploader: ImageUploader) {
@@ -42,28 +18,6 @@ final class UploadManager {
         self.uploader = uploader
         
         queue.maxConcurrentOperationCount = 1
-    }
-    
-    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void> {
-        return firstly {
-            prepareFolderForJob(id: id, images: images)
-        }.then(on: self.bgq) {
-            self.saveJob(id: id, steps: images.count)
-        }.then(on: self.bgq) {
-            self.startJob(id: id, steps: images.count)
-        }
-    }
-    
-    func currentUploads() throws -> [UploadProgress] {
-        let jobs = jobsDB.getActiveJobs()
-        return try jobs.map { (id) throws -> UploadProgress in
-            let status = try self.jobsDB.getJobStatus(id: id)
-            return UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
-        }
-    }
-    
-    var uploadEvents: AnyPublisher<UploadEvent, Never> {
-        return uploadSubject.eraseToAnyPublisher()
     }
     
     // MARK:- private
@@ -142,3 +96,30 @@ final class UploadManager {
     private let bgq = DispatchQueue.global(qos: .userInitiated)
 }
 
+extension UploadManager: UploadProvider {
+    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void> {
+        return firstly {
+            prepareFolderForJob(id: id, images: images)
+        }.then(on: self.bgq) {
+            self.saveJob(id: id, steps: images.count)
+        }.then(on: self.bgq) {
+            self.startJob(id: id, steps: images.count)
+        }
+    }
+    
+    func currentUploads() -> Promise<[UploadProgress]> {
+        return Promise { seal in
+            let jobs = jobsDB.getActiveJobs()
+            let progress = try jobs.map { (id) throws -> UploadProgress in
+                let status = try self.jobsDB.getJobStatus(id: id)
+                return UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
+            }
+            
+            seal.fulfill(progress)
+        }
+    }
+    
+    var uploadEvents: AnyPublisher<UploadEvent, Never> {
+        return uploadSubject.eraseToAnyPublisher()
+    }
+}
