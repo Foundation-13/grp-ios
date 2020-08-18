@@ -9,8 +9,7 @@
 import Foundation
 import GRDB
 
-
-// MARK:- Implementation
+// MARK:- JobsDBProvider
 
 extension DatabaseWrapper: JobsDBProvider {
     func createJob(id: String, steps: [Int]) throws {
@@ -43,7 +42,7 @@ extension DatabaseWrapper: JobsDBProvider {
             let completed = completedRows.map { (row) -> Int in row["step"] }
             let remaining = remainingRows.map { (row) -> Int in row["step"] }
             
-            return JobStatus(completed: completed, remaining: remaining)
+            return JobStatus(id: id, completed: completed, remaining: remaining)
         }
     }
     
@@ -54,10 +53,20 @@ extension DatabaseWrapper: JobsDBProvider {
         }
     }
     
-    func getActiveJobs() throws -> [String] {
-        return try dbQueue.read { (db) -> [String] in
+    func getActiveJobs() throws -> [JobStatus] {
+        return try dbQueue.read { (db) -> [JobStatus] in
             let jobs = try Row.fetchAll(db, sql: "SELECT job_id FROM upload_jobs", arguments: [])
-            return jobs.map { (row) -> String in row["job_id"] }
+            return try jobs.map { (row) throws -> JobStatus in
+                let id: String = row["job_id"]
+                
+                let completedRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = true", arguments: [id])
+                let remainingRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = false", arguments: [id])
+                
+                let completed = completedRows.map { (row) -> Int in row["step"] }
+                let remaining = remainingRows.map { (row) -> Int in row["step"] }
+                
+                return JobStatus(id: id, completed: completed, remaining: remaining)
+            }
         }
     }
 }

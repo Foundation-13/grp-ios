@@ -12,7 +12,7 @@ final class DummyJobsDB: JobsDBProvider {
     
     func createJob(id: String, steps: [Int]) throws {
         print("created job \(id), steps \(steps)")
-        jobs[id] = JobStatus(completed: [], remaining: steps)
+        jobs[id] = JobStatus(id: id, completed: [], remaining: steps)
     }
     
     func markStepCompleted(_ step: Int, forJob id: String) throws {
@@ -26,7 +26,7 @@ final class DummyJobsDB: JobsDBProvider {
             newCompleted.append(step)
             newRemaining.remove(at: index)
                 
-            let newStatus = JobStatus(completed: newCompleted, remaining: newRemaining)
+            let newStatus = JobStatus(id: id, completed: newCompleted, remaining: newRemaining)
             print("job \(id), new status \(newStatus)")
             jobs[id] = newStatus
         }
@@ -44,8 +44,8 @@ final class DummyJobsDB: JobsDBProvider {
         return job
     }
     
-    func getActiveJobs() throws -> [String] {
-        return Array<String>(jobs.keys)
+    func getActiveJobs() throws -> [JobStatus] {
+        return Array<JobStatus>(jobs.values)
     }
     
     // MARK:- private

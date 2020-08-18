@@ -15,6 +15,7 @@ enum JobDBErr: Error {
 }
 
 struct JobStatus {
+    let id: String
     let completed: [Int]
     let remaining: [Int]
     
@@ -34,5 +35,5 @@ protocol JobsDBProvider {
     
     func completeJob(id: String) throws
     
-    func getActiveJobs() throws -> [String]
+    func getActiveJobs() throws -> [JobStatus]
 }

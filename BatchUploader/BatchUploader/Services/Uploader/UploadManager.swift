@@ -30,9 +30,8 @@ final class UploadManager {
             
             do {
                 let jobs = try self.jobsDB.getActiveJobs() // TODO: Возвращать сразу со статусами
-                for jid in jobs {
-                    let status = try self.jobsDB.getJobStatus(id: jid)
-                    self.startJob(id: jid, steps: status.remaining).catch { (err) in
+                for job in jobs {
+                    self.startJob(id: job.id, steps: job.remaining).catch { (err) in
                         print("start job error \(err)")
                     }
                 }
@@ -134,10 +133,7 @@ extension UploadManager: UploadProvider {
     func currentUploads() -> Promise<[UploadProgress]> {
         return Promise { seal in
             let jobs = try jobsDB.getActiveJobs()
-            let progress = try jobs.map { (id) throws -> UploadProgress in
-                let status = try self.jobsDB.getJobStatus(id: id)
-                return UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
-            }
+            let progress = jobs.map { UploadProgress(id: $0.id, total: $0.totalCount, uploaded: $0.completedCount) }
             
             seal.fulfill(progress)
         }

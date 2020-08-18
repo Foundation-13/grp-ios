@@ -129,8 +129,8 @@
 		46866A7124E933A60091E585 /* JobsDB */ = {
 			isa = PBXGroup;
 			children = (
-				4620684224E701740083D8A7 /* JobsDB.swift */,
 				46866A7224E933C80091E585 /* Provider.swift */,
+				4620684224E701740083D8A7 /* JobsDB.swift */,
 				46866A7424E935610091E585 /* DummyJobsDB.swift */,
 			);
 			path = JobsDB;

@@ -18,11 +18,7 @@ final class NewUploadModel: ObservableObject {
     @Published var readyForUpload = false
     @Published var isLoading = false
     @Published var selectedImages: [UIImage] = []
-    
-    deinit {
-        print("NewUploadModel deinit")
-    }
-    
+        
     func cancel() {
         self.isActive.wrappedValue = false
     }
