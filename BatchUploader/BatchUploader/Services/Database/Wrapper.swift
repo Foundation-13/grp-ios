@@ -13,7 +13,7 @@ final class DatabaseWrapper {
     
     init(dbName: String) throws {
         let databaseURL = try FileManager.default
-            .url(for: .applicationDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent(dbName)
         
         dbQueue = try DatabaseQueue(path: databaseURL.path)
@@ -30,16 +30,14 @@ final class DatabaseWrapper {
                 try db.create(table: "upload_jobs") { t in
                     t.column("job_id", .text).notNull()
                     t.column("created", .datetime).notNull()
-                    t.column("total", .integer).notNull()
-                    t.column("completed", .integer).notNull()
                     t.primaryKey(["job_id"])
                 }
                 
                 try db.create(table: "upload_job_steps") { t in
                     t.column("job_id", .text).notNull()
-                    t.column("step_id", .integer).notNull()
+                    t.column("step", .integer).notNull()
                     t.column("completed", .boolean).notNull()
-                    t.primaryKey(["job_id", "step_id"])
+                    t.uniqueKey(["job_id", "step"])
                 }
             }
             

@@ -24,11 +24,19 @@ final class ServicesAssemble {
        return Storage()
     }()
     
-    private lazy var jobsDB: JobsDBProvider = {
-       return DummyJobsDB()
-    }()
+    private var jobsDB: JobsDBProvider {
+       return database
+    }
     
     private lazy var imageUploader: ImageUploader = {
         return DummyImageUploader()
+    }()
+    
+    private lazy var database: DatabaseWrapper = {
+        do {
+            return try DatabaseWrapper(dbName: "uploader.db")
+        } catch let err {
+            fatalError("failed to open db: \(err)")
+        }
     }()
 }

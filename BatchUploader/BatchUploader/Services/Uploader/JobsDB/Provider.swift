@@ -27,12 +27,12 @@ struct JobStatus {
 }
 
 protocol JobsDBProvider {
-    func createJob(id: String, steps: Int)  throws
+    func createJob(id: String, steps: [Int]) throws
     
     func markStepCompleted(_ step: Int, forJob id: String) throws
     func getJobStatus(id: String) throws -> JobStatus
     
     func completeJob(id: String) throws
     
-    func getActiveJobs() -> [String]
+    func getActiveJobs() throws -> [String]
 }

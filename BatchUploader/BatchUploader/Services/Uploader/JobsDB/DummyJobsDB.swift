@@ -10,11 +10,9 @@ import Foundation
 
 final class DummyJobsDB: JobsDBProvider {
     
-    func createJob(id: String, steps: Int) throws {
+    func createJob(id: String, steps: [Int]) throws {
         print("created job \(id), steps \(steps)")
-        
-        let remaining = (0..<steps).map { $0 }
-        jobs[id] = JobStatus(completed: [], remaining: remaining)
+        jobs[id] = JobStatus(completed: [], remaining: steps)
     }
     
     func markStepCompleted(_ step: Int, forJob id: String) throws {
@@ -46,7 +44,7 @@ final class DummyJobsDB: JobsDBProvider {
         return job
     }
     
-    func getActiveJobs() -> [String] {
+    func getActiveJobs() throws -> [String] {
         return Array<String>(jobs.keys)
     }
     

@@ -18,9 +18,31 @@ final class UploadManager {
         self.uploader = uploader
         
         queue.maxConcurrentOperationCount = 1
+        
+        restoreUploads()
     }
     
     // MARK:- private
+    
+    private func restoreUploads() {
+        bgq.async { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let jobs = try self.jobsDB.getActiveJobs() // TODO: Возвращать сразу со статусами
+                for jid in jobs {
+                    let status = try self.jobsDB.getJobStatus(id: jid)
+                    self.startJob(id: jid, steps: status.remaining).catch { (err) in
+                        print("start job error \(err)")
+                    }
+                }
+            }
+            catch let err {
+                print("restore jobs error \(err)")
+            }
+        }
+    }
+    
     private func updateProgress(_ e: UploadEvent) {
         DispatchQueue.main.async {
             self.uploadSubject.send(e)
@@ -47,16 +69,16 @@ final class UploadManager {
         }
     }
     
-    private func saveJob(id: String, steps: Int) -> Promise<Void> {
+    private func saveJob(id: String, steps: [Int]) -> Promise<Void> {
         return Promise { seal in
             try self.jobsDB.createJob(id: id, steps: steps)
             seal.fulfill(())
         }
     }
     
-    private func startJob(id: String, steps: Int) -> Promise<Void> {
+    private func startJob(id: String, steps: [Int]) -> Promise<Void> {
         return Promise { seal in
-            for indx in 0..<steps {
+            for indx in steps {
                 let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader)
                 operation.completionBlock = { [weak self] in
                     guard let self = self else { return }
@@ -98,18 +120,20 @@ final class UploadManager {
 
 extension UploadManager: UploadProvider {
     func startNewUpload(id: String, images: [UIImage]) -> Promise<Void> {
+        let steps = (0..<images.count).map { $0 }
+        
         return firstly {
             prepareFolderForJob(id: id, images: images)
         }.then(on: self.bgq) {
-            self.saveJob(id: id, steps: images.count)
+            self.saveJob(id: id, steps: steps)
         }.then(on: self.bgq) {
-            self.startJob(id: id, steps: images.count)
+            self.startJob(id: id, steps: steps)
         }
     }
     
     func currentUploads() -> Promise<[UploadProgress]> {
         return Promise { seal in
-            let jobs = jobsDB.getActiveJobs()
+            let jobs = try jobsDB.getActiveJobs()
             let progress = try jobs.map { (id) throws -> UploadProgress in
                 let status = try self.jobsDB.getJobStatus(id: id)
                 return UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
