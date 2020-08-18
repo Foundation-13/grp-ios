@@ -12,10 +12,10 @@ import PromiseKit
 
 final class UploadManager {
     
-    init(storage: StorageProviver, jobsDB: JobsDBProvider, uploader: ImageUploader) {
+    init(storage: StorageProviver, jobsDB: JobsDBProvider, api: UploadAPIProvider) {
         self.storage = storage
         self.jobsDB = jobsDB
-        self.uploader = uploader
+        self.api = api
         
         queue.maxConcurrentOperationCount = 1
         
@@ -29,7 +29,7 @@ final class UploadManager {
             guard let self = self else { return }
             
             do {
-                let jobs = try self.jobsDB.getActiveJobs() // TODO: Возвращать сразу со статусами
+                let jobs = try self.jobsDB.getActiveJobs()
                 for job in jobs {
                     self.startJob(id: job.id, steps: job.remaining).catch { (err) in
                         print("start job error \(err)")
@@ -78,22 +78,26 @@ final class UploadManager {
     private func startJob(id: String, steps: [Int]) -> Promise<Void> {
         return Promise { seal in
             for indx in steps {
-                let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, uploader: uploader)
+                let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, api: api)
                 operation.completionBlock = { [weak self] in
                     guard let self = self else { return }
                     
-                    do {
-                        let status = try self.jobsDB.getJobStatus(id: id)
-                        
-                        let p = UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
-                        self.updateProgress(.progress(p))
-                        
-                        if status.isFinished {
-                            try self.jobsDB.completeJob(id: id)
-                            self.updateProgress(.completed(id))
+                    DispatchQueue.global().async {
+                        do {
+                            let status = try self.jobsDB.getJobStatus(id: id)
+                            
+                            let p = UploadProgress(id: id, total: status.totalCount, uploaded: status.completedCount)
+                            self.updateProgress(.progress(p))
+                            
+                            if status.isFinished {
+                                try self.api.completeJob(id: id).wait()
+                                try self.jobsDB.completeJob(id: id)
+                                
+                                self.updateProgress(.completed(id))
+                            }
+                        } catch let err {
+                            print("something bad in completion block, job id \(id), \(err)")
                         }
-                    } catch let err {
-                        print("something bad in completion block \(err)")
                     }
                 }
                 
@@ -109,23 +113,24 @@ final class UploadManager {
     private let uploadSubject = PassthroughSubject<UploadEvent, Never>()
     
     private let storage: StorageProviver
-    private let uploader: ImageUploader
+    private let api: UploadAPIProvider
     private let jobsDB: JobsDBProvider
     
     private let queue = OperationQueue()
-    
     private let bgq = DispatchQueue.global(qos: .userInitiated)
 }
 
 extension UploadManager: UploadProvider {
-    func startNewUpload(id: String, images: [UIImage]) -> Promise<Void> {
+    func startNewUpload(starter: @escaping UploadStarterFn, images: [UIImage]) -> Promise<Void> {
         let steps = (0..<images.count).map { $0 }
         
         return firstly {
-            prepareFolderForJob(id: id, images: images)
-        }.then(on: self.bgq) {
-            self.saveJob(id: id, steps: steps)
-        }.then(on: self.bgq) {
+            starter()
+        }.then(on: self.bgq) { id in
+            self.prepareFolderForJob(id: id, images: images).map { id }
+        }.then(on: self.bgq) { id in
+            self.saveJob(id: id, steps: steps).map { id }
+        }.then(on: self.bgq) { id in
             self.startJob(id: id, steps: steps)
         }
     }

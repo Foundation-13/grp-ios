@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4620684324E701740083D8A7 /* JobsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684224E701740083D8A7 /* JobsDB.swift */; };
-		4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684624E7076B0083D8A7 /* ImageUploader.swift */; };
+		4620684724E7076B0083D8A7 /* UploadAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684624E7076B0083D8A7 /* UploadAPI.swift */; };
 		4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684824E70D830083D8A7 /* UploadOperation.swift */; };
 		4620684C24E724D50083D8A7 /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4620684B24E724D50083D8A7 /* PromiseKit */; };
 		4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */; };
@@ -49,7 +49,7 @@
 
 /* Begin PBXFileReference section */
 		4620684224E701740083D8A7 /* JobsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsDB.swift; sourceTree = "<group>"; };
-		4620684624E7076B0083D8A7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		4620684624E7076B0083D8A7 /* UploadAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadAPI.swift; sourceTree = "<group>"; };
 		4620684824E70D830083D8A7 /* UploadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadOperation.swift; sourceTree = "<group>"; };
 		4620684E24E7A6860083D8A7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		4620685024E7A6AC0083D8A7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 				462EAC8B24EA7C8B00E3CCD3 /* UploadProvider.swift */,
 				46A1453524E658540053CD7E /* UploadManager.swift */,
 				46A1453724E65CCA0053CD7E /* Storage.swift */,
-				4620684624E7076B0083D8A7 /* ImageUploader.swift */,
+				4620684624E7076B0083D8A7 /* UploadAPI.swift */,
 				4620684824E70D830083D8A7 /* UploadOperation.swift */,
 			);
 			path = Uploader;
@@ -341,7 +341,7 @@
 				46866A7324E933C80091E585 /* Provider.swift in Sources */,
 				46A1450A24E5E16F0053CD7E /* AppDelegate.swift in Sources */,
 				4620684F24E7A6860083D8A7 /* ActivityIndicator.swift in Sources */,
-				4620684724E7076B0083D8A7 /* ImageUploader.swift in Sources */,
+				4620684724E7076B0083D8A7 /* UploadAPI.swift in Sources */,
 				4620684924E70D830083D8A7 /* UploadOperation.swift in Sources */,
 				462EAC8824EA6DEA00E3CCD3 /* Wrapper.swift in Sources */,
 				4620685124E7A6AC0083D8A7 /* LoadingView.swift in Sources */,
@@ -625,8 +625,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mxcl/PromiseKit.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.13.2;
+				kind = exactVersion;
+				version = "7.0.0-alpha3";
 			};
 		};
 		46866A6E24E9328F0091E585 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {

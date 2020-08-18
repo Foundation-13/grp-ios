@@ -7,24 +7,37 @@
 //
 
 import Foundation
+import PromiseKit
 
 final class UploadOperation: Operation {
 
-    init(jobId: String, index: Int, storage: StorageProviver, db: JobsDBProvider, uploader: ImageUploader) {
+    init(jobId: String, index: Int, storage: StorageProviver, db: JobsDBProvider, api: UploadAPIProvider) {
         self.jobId = jobId
         self.index = index
         self.storage = storage
         self.db = db
-        self.uploader = uploader
+        self.api = api
     }
     
     override func main() {
         do {
-            let data = try storage.readFile(path: "/uploads/\(jobId)/\(index)")
-            uploader.uploadImage(data, index: index, forJob: jobId)
-            try db.markStepCompleted(index, forJob: jobId)
+            try firstly {
+                readFile()
+            }.then { (data) -> Promise<Void> in
+                return self.api.uploadImage(data, index: self.index, forJob: self.jobId)
+            }.done {
+                try self.db.markStepCompleted(self.index, forJob: self.jobId)
+            }.wait()
         } catch let err {
-            print("failed to upload \(err)")
+            print("Upload failed, \(jobId), \(index), \(err)")
+        }
+    }
+
+    // MARK:- private
+    private func readFile() -> Promise<Data> {
+        return Promise { seal in
+            let data = try storage.readFile(path: "/uploads/\(jobId)/\(index)")
+            seal.fulfill(data)
         }
     }
     
@@ -32,5 +45,5 @@ final class UploadOperation: Operation {
     private let index: Int
     private let storage: StorageProviver
     private let db: JobsDBProvider
-    private let uploader: ImageUploader
+    private let api: UploadAPIProvider
 }

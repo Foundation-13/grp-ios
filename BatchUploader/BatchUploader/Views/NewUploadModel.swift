@@ -13,6 +13,7 @@ import PromiseKit
 final class NewUploadModel: ObservableObject {
     init(isActive: Binding<Bool>) {
         self.isActive = isActive
+        self.uploader = ServicesAssemble.shared.uploadProvider
     }
     
     @Published var readyForUpload = false
@@ -29,9 +30,7 @@ final class NewUploadModel: ObservableObject {
         self.isLoading = true
         
         firstly {
-            createRecordOnServer()
-        }.then { id in
-            ServicesAssemble.shared.uploadProvider.startNewUpload(id: id, images: self.selectedImages)
+            self.uploader.startNewUpload(starter: { self.createRecordOnServer() }, images: self.selectedImages)
         }.ensure {
             self.isLoading = false
         }.done {
@@ -50,6 +49,7 @@ final class NewUploadModel: ObservableObject {
     }
     
     private var isActive: Binding<Bool>
+    private var uploader: UploadProvider
 }
 
 extension NewUploadModel: ImagePickerDelegate {
