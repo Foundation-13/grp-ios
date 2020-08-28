@@ -56,5 +56,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I need location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>I need photo library</string>
 </dict>
 </plist>

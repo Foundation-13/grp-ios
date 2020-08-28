@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import Photos
 
 struct UploadViewState: Identifiable {
     let name: String
@@ -65,6 +66,13 @@ final class MainViewModel: ObservableObject {
         }.catch { err in
             print("failed to retrieve current uploads state")
         }
+        
+        PHPhotoLibrary.requestAuthorization { (status) in
+            print("photo lib authorization: \(status)")
+        }
+        
+        ServicesAssemble.shared.location.askForPermissions()
+        
     }
     
     func viewDidDisappear() {

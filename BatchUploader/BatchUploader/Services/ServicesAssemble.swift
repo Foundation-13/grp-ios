@@ -18,6 +18,10 @@ final class ServicesAssemble {
         return UploadManager(storage: storage, jobsDB: jobsDB, api: imageUploadAPI)
     }()
     
+    lazy var location: LocationProvider = {
+        return LocationService()
+    }()
+    
     // MARK:- private
     
     private lazy var storage: Storage = {

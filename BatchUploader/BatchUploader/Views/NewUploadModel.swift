@@ -50,11 +50,19 @@ final class NewUploadModel: ObservableObject {
     
     private var isActive: Binding<Bool>
     private var uploader: UploadProvider
+    
+    private var imagesWithLocation: [ImageWithLocation] = []
 }
 
 extension NewUploadModel: ImagePickerDelegate {
-    func imagePicker(_ picker: ImagePickerView, didSelectImage image: UIImage) {
-        selectedImages.append(image)
+    func imagePicker(_ picker: ImagePickerView, didSelectImage image: ImageWithLocation) {
+        selectedImages.append(image.image)
+        imagesWithLocation.append(image)
+        
+        if let loc = image.location {
+            print("Added image with location: \(loc)")
+        }
+        
         readyForUpload = true
     }
 }

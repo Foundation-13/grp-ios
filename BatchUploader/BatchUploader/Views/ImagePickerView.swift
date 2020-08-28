@@ -1,8 +1,15 @@
 import SwiftUI
 import UIKit
+import Photos
+import CoreLocation
+
+struct ImageWithLocation {
+    let image: UIImage
+    let location: CLLocationCoordinate2D?
+}
 
 protocol ImagePickerDelegate: class {
-    func imagePicker(_ picker: ImagePickerView, didSelectImage image: UIImage)
+    func imagePicker(_ picker: ImagePickerView, didSelectImage image: ImageWithLocation)
 }
 
 struct ImagePickerView: UIViewControllerRepresentable {
@@ -29,8 +36,11 @@ struct ImagePickerView: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            let asset = info[.phAsset] as? PHAsset
+            let location = asset?.location?.coordinate
+            
             if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage, let delegate = parent.delegate {
-                delegate.imagePicker(parent, didSelectImage: image)
+                delegate.imagePicker(parent, didSelectImage: ImageWithLocation(image: image, location: location))
             }
             
             picker.dismiss(animated: true)
