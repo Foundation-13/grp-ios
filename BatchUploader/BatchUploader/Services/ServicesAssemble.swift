@@ -22,8 +22,41 @@ final class ServicesAssemble {
         return LocationService()
     }()
     
+    lazy var profile: UserProfileProvider = {
+       return UserProfileService(executor: requestExecutor, imageProcessor: imageProcessor)
+    }()
+    
+    lazy var places: PlacesProvider = {
+        return PlacesService(executor: requestExecutor)
+    }()
+    
+    lazy var review: ReviewProvider = {
+        return ReviewService(executor: requestExecutor)
+    }()
+
+    lazy var healthcheckProvider: HealthcheckProvider = {
+       HealthcheckService(executor: requestExecutor)
+    }()
+    
     // MARK:- private
     
+    private lazy var userSession: UserSession = {
+        UserSession()
+    }()
+    
+    private lazy var requestExecutor: RequestExecutor = {
+        RequestExecutor(sessionProvider: sessionProvider)
+    }()
+    
+    private lazy var sessionProvider: AfSessionProvider = {
+        let configuration = URLSessionConfiguration.default
+        return AfSessionProviderImpl(configuration: configuration, userSession: userSession)
+    }()
+    
+    private lazy var imageProcessor: ImageProcessor = {
+        ImageProcessorImpl()
+    }()
+
     private lazy var storage: Storage = {
        return Storage()
     }()

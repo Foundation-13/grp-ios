@@ -1,20 +1,13 @@
-//
-//  ContentView.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 13.08.2020.
-//
-
 import SwiftUI
 
 struct MainView: View {
     @ObservedObject var model: MainViewModel
-    @State var openNewUpload = false
+    
+    @State var openCreateReview = false
     
     var body: some View {
         NavigationView {
             VStack {
-                
                 if self.model.uploads.isEmpty {
                     VStack {
                         Text("No active uploads")
@@ -33,13 +26,25 @@ struct MainView: View {
                     }.frame(height: 200)
                 }
                 
-                Button("Create new upload") {
-                    self.openNewUpload = true
+                Button("Create new review") {
+                    self.openCreateReview = true
                 }
                 
                 Spacer()
                 
-                NavigationLink(destination: NewUploadView(model: NewUploadModel(isActive: self.$openNewUpload)), isActive: self.$openNewUpload) {
+                Button("Create profile") {
+                    self.model.updateProfile()
+                }
+                
+                Spacer()
+                
+                Button("Get profile") {
+                    self.model.readProfile()
+                }
+                
+                
+                NavigationLink(destination: SelectPicturesView(model: SelectPicturesModel(), isActive: self.$openCreateReview),
+                               isActive: self.$openCreateReview) {
                     EmptyView()
                 }
             }

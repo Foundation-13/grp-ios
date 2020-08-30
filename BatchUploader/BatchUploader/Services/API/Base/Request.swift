@@ -7,7 +7,7 @@ protocol HostProvider {
 
 struct DefaultHostProvider: HostProvider {
     var host: String {
-        return "127.0.0.1"
+        return "http://192.168.31.196:9002"
     }
 }
 

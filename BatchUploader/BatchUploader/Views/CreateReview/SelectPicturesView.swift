@@ -1,23 +1,17 @@
-//
-//  NewUploadView.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 14.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import SwiftUI
 import PromiseKit
 
-struct CreateReviewView: View {
-    @ObservedObject var model: CreateReviewModel
+struct SelectPicturesView: View {
+    @ObservedObject var model: SelectPicturesModel
+    @Binding var isActive: Bool
+    
     @State var openPicker = false
     
     var content: some View {
         VStack {
             Group {
                 if self.model.selectedImages.isEmpty  {
-                    Text("No images yet").padding()
+                    Text("No pictures yet").padding()
                 } else {
                     ScrollView(.horizontal) {
                         HStack {
@@ -32,17 +26,22 @@ struct CreateReviewView: View {
             }
             .padding(.vertical, 20)
             
-            Button("Add image") {
+            Button("Add picture") {
                 self.openPicker = true
             }
             .padding(.vertical, 20)
             
-            Button("Get places") {
+            Button("Select place") {
                 self.model.getPlaces()
             }
             .padding(.vertical, 20)
-                                    
+            
             Spacer()
+            
+            NavigationLink(destination: SelectPlaceView(model: model.selectPlaceModel, isActive: self.$isActive),
+                           isActive: self.$model.done) {
+                EmptyView()
+            }.isDetailLink(false)
         }
         .padding(.top, 20)
         .sheet(isPresented: $openPicker, content: {
@@ -53,17 +52,6 @@ struct CreateReviewView: View {
     var body: some View {
         LoadingView(isShowing: model.isLoading){
             self.content
-        }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading:
-                Button("Cancel") {
-                    self.model.cancel()
-                },
-            trailing:
-                Button("Upload") {
-                    self.model.upload()
-                }.disabled(!model.readyForUpload)
-        )
+        }.navigationBarTitle("Upload pictures")
     }
 }

@@ -30,6 +30,8 @@ final class AfSessionProviderImpl: AfSessionProvider {
         }
         
         func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (AdapterResult) -> Void) {
+            print(urlRequest.debugDescription)
+            
             userSession.getToken().done { (token) in
                 var copy = urlRequest
                 copy.addValue(token.bearer, forHTTPHeaderField: "Authorization")

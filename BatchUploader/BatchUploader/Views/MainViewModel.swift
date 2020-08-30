@@ -1,11 +1,3 @@
-//
-//  MainViewModel.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 14.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import Foundation
 import Combine
 import Photos
@@ -27,11 +19,11 @@ struct UploadViewState: Identifiable {
     }
 }
 
-
 final class MainViewModel: ObservableObject {
     
     init() {
         self.uploadProvider = ServicesAssemble.shared.uploadProvider
+        self.profileProvider = ServicesAssemble.shared.profile
         
         self.cancellable = uploadProvider.uploadEvents.sink(receiveValue: { [weak self] (event) in
             guard let self = self else { return }
@@ -79,6 +71,24 @@ final class MainViewModel: ObservableObject {
         visible = false
     }
     
+    func readProfile() {
+        profileProvider.getProfile().done { (profile) in
+            print("Profile: \(profile)")
+        }.catch { (err) in
+            print("Profile read error: \(err)")
+        }
+    }
+    
+    func updateProfile() {
+        let profile = UserProfile(id: 0, name: "John Doe", birthDate: Date(), email: "test@test.com", avatar: nil)
+        
+        profileProvider.update(profile: profile).done { _ in
+            print("profile updated")
+        }.catch { (err) in
+            print("Profile update error: \(err)")
+        }
+    }
+    
     @Published var uploads = [UploadViewState]()
     
     // MARK:- private
@@ -100,7 +110,9 @@ final class MainViewModel: ObservableObject {
         }
     }
     
+    private let profileProvider: UserProfileProvider
     private let uploadProvider: UploadProvider
+    
     private var cancellable: AnyCancellable?
     private var visible = false
 }
