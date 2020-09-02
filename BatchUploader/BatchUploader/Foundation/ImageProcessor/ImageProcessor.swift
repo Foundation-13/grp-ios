@@ -3,7 +3,7 @@ import UIKit
 import PromiseKit
 
 protocol ImageProcessor {
-    func imageToPng(_ image: UIImage) -> Promise<Data>
+    func makeAvatarFrom(image: UIImage) -> Promise<Data>
 }
 
 // MARK:-
@@ -12,16 +12,18 @@ final class ImageProcessorImpl {
 }
 
 extension ImageProcessorImpl: ImageProcessor {
-    func imageToPng(_ image: UIImage) -> Promise<Data> {
+    func makeAvatarFrom(image: UIImage) -> Promise<Data> {
         return Promise { seal in
             Self.queue.async {
-                if let data = image.pngData() {
+                if let data = image.jpegData(compressionQuality: 0.1) { // TODO: It's bullshit, use a normal algorithm
                     seal.fulfill(data)
                 } else {
-                    seal.reject(GeneralError.converting("Coudn't read data from png"))
+                    seal.reject(GeneralError.converting("coudn't create avatar from image"))
                 }
             }
         }
     }
+    
+    //func reduceSize()
 }
 

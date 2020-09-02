@@ -18,11 +18,11 @@ struct SelectPlaceView: View {
         )
     }
     
-    func placesList(_ places: [ClusterViewState.PlaceViewState]) -> AnyView {
+    func placesList(_ places: [ClusterViewState.PlaceViewState], images: [UIImage]) -> AnyView {
         AnyView(
             VStack(alignment: .leading) {
                 ForEach(places) { row in
-                    NavigationLink(destination: CreateReviewView(model: CreateReviewModel(place: row.place), isActive: self.$isActive)) {
+                    NavigationLink(destination: CreateReviewView(model: CreateReviewModel(place: row.place, images: images), isActive: self.$isActive)) {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text(row.name).bold()
@@ -45,7 +45,7 @@ struct SelectPlaceView: View {
                 ForEach(model.viewState) { row in
                     Text("Found \(row.places.count) candidates for")
                     self.imagesLine(row.images)
-                    self.placesList(row.places)
+                    self.placesList(row.places, images: row.images)
                     Divider()
                     Spacer()
                 }

@@ -1,0 +1,17 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '13.5'
+
+target 'BatchUploader' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  pod "CropViewController", "2.5.3"
+
+  # Pods for BatchUploader
+
+  target 'BatchUploaderTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

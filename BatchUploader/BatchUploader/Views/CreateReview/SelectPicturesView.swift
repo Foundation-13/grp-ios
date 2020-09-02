@@ -45,7 +45,7 @@ struct SelectPicturesView: View {
         }
         .padding(.top, 20)
         .sheet(isPresented: $openPicker, content: {
-            ImagePickerView(delegate: self.model)
+            ImagePickerView(delegate: self.model, source: .photoLibrary)
         })
     }
     

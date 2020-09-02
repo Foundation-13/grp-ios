@@ -4,6 +4,7 @@ struct MainView: View {
     @ObservedObject var model: MainViewModel
     
     @State var openCreateReview = false
+    @State var openUpdateProfile = false
     
     var body: some View {
         NavigationView {
@@ -33,7 +34,12 @@ struct MainView: View {
                 Spacer()
                 
                 Button("Create profile") {
-                    self.model.updateProfile()
+                    self.openUpdateProfile = true
+                }
+                
+                NavigationLink(destination: RegisterProfileView(model: RegisterProfileModel(), isActive: self.$openUpdateProfile),
+                               isActive: self.$openUpdateProfile) {
+                    EmptyView()
                 }
                 
                 Spacer()

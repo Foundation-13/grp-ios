@@ -47,9 +47,9 @@ extension UserProfileService: UserProfileProvider {
     
     func updateAvatar(image: UIImage) -> Promise<Void> {
         return firstly {
-            imageProcessor.imageToPng(image)
+            imageProcessor.makeAvatarFrom(image: image)
         }.then { (data) -> Promise<Void> in
-            return self.executor.run(request: UpdateAvatarRequest(data: data))
+            return self.executor.upload(request: UpdateAvatarRequest(data: data))
         }
     }
     

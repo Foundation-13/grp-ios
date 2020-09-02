@@ -7,14 +7,14 @@ struct UserProfile: Codable {
     
     let id: Int
     let name: String
-    let birthDate: Date
+    let age: Int
     let email: String?
     let avatar: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "name"
-        case birthDate = "birth_date"
+        case age = "age"
         case email = "email"
         case avatar = "avatar"
     }
@@ -38,8 +38,8 @@ struct UserProfile: Codable {
 
 // MARK:-
 extension UserProfile {
-    static func make(id: Int = 0, name: String = "", birthDate: Date = Date(), email: String = "", avatar: String = "") -> UserProfile {
-        return UserProfile(id: id, name: name, birthDate: birthDate, email: email, avatar: avatar)
+    static func make(id: Int = 0, name: String = "", age: Int = 0, email: String = "", avatar: String = "") -> UserProfile {
+        return UserProfile(id: id, name: name, age: age, email: email, avatar: avatar)
     }
 }
 

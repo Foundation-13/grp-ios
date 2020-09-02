@@ -48,7 +48,7 @@ final class RequestExecutor {
     
     private func uploadRaw(request: UploadRequest) -> Promise<Data?> {
         let mpfd = MultipartFormData(fileManager: FileManager.default)
-        mpfd.append(request.data, withName: request.name, fileName: request.fileName, mimeType: request.mimeType)
+        mpfd.append(request.data, withName: request.name, fileName: request.name)
         
         let task = session(from: request).upload(multipartFormData: mpfd, with: request)
         return Promise { seal in

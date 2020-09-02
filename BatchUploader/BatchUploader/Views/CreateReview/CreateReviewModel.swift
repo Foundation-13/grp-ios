@@ -1,12 +1,16 @@
 import Foundation
 import Combine
 import SwiftUI
+import UIKit
+import PromiseKit
 
 final class CreateReviewModel: ObservableObject {
-    init(place: Places.Place) {
+    init(place: Places.Place, images: [UIImage]) {
         self.place = place
+        self.images = images
         
         self.reviewProvider = ServicesAssemble.shared.review
+        self.uploadProvider = ServicesAssemble.shared.uploadProvider
     }
     
     var name: String {
@@ -30,17 +34,18 @@ final class CreateReviewModel: ObservableObject {
         
         isLoading = true
         
-        reviewProvider.create(review: review).done { _ in
-            print("review created")
+        uploadProvider.startNewUpload(starter: { () -> Promise<Int> in
+            self.reviewProvider.create(review: review).map { $0.id }
+        }, images: images).done { _ in
             self.isReviewCreated = true
-        }.ensure {
-            self.isLoading = false
         }.catch { (err) in
             print("Create review error: \(err)")
         }
     }
     
     private let place: Places.Place
+    private let images: [UIImage]
     
     private let reviewProvider: ReviewProvider
+    private let uploadProvider: UploadProvider
 }

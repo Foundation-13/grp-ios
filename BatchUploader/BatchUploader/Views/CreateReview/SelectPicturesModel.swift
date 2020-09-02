@@ -77,16 +77,19 @@ final class SelectPicturesModel: ObservableObject {
 }
 
 extension SelectPicturesModel: ImagePickerDelegate {
-    func imagePicker(_ picker: ImagePickerView, didSelectImage image: UIImage, location: CLLocationCoordinate2D?) {
+    func imagePickerDidSelectImage(_ image: UIImage, location: CLLocationCoordinate2D?) {
         guard let location = location else {
             print("**** No location")
-            return 
+            return
         }
         
         selectedImages.append(image)
         imagesWithLocation.append(ImageWithLocation(image: image, coord: location))
         
         print("Added image with location: \(location)")
-
+    }
+    
+    func imagePickerCancel() {
+        
     }
 }

@@ -3,12 +3,14 @@ import Combine
 import Photos
 
 struct UploadViewState: Identifiable {
-    let name: String
+    let id: Int
     let status: String
     let totalSteps: Int
     let completedSteps: Int
     
-    var id: String { return name }
+    var name: String {
+        return "Review with \(id)"
+    }
     
     var progress: Float {
         if totalSteps == 0 {
@@ -53,7 +55,7 @@ final class MainViewModel: ObservableObject {
         visible = true
         uploadProvider.currentUploads().done {
             self.uploads = $0.map {
-                UploadViewState(name: $0.id, status: "In progress", totalSteps: $0.total, completedSteps: $0.uploaded)
+                UploadViewState(id: $0.id, status: "In progress", totalSteps: $0.total, completedSteps: $0.uploaded)
             }
         }.catch { err in
             print("failed to retrieve current uploads state")
@@ -79,31 +81,23 @@ final class MainViewModel: ObservableObject {
         }
     }
     
-    func updateProfile() {
-        let profile = UserProfile(id: 0, name: "John Doe", birthDate: Date(), email: "test@test.com", avatar: nil)
-        
-        profileProvider.update(profile: profile).done { _ in
-            print("profile updated")
-        }.catch { (err) in
-            print("Profile update error: \(err)")
-        }
-    }
+   
     
     @Published var uploads = [UploadViewState]()
     
     // MARK:- private
-    private func addNewUpload(id: String) {
-        uploads = uploads.with(newElement: UploadViewState(name: id, status: "Starting", totalSteps: 0, completedSteps: 0))
+    private func addNewUpload(id: Int) {
+        uploads = uploads.with(newElement: UploadViewState(id: id, status: "Starting", totalSteps: 0, completedSteps: 0))
     }
     
-    private func completeUpload(id: String) {
+    private func completeUpload(id: Int) {
         uploads = uploads.removedFirst { $0.id == id }
     }
     
     private func progress(_ p: UploadProgress) {
         uploads = uploads.map {
             if $0.id == p.id {
-                return UploadViewState(name: $0.id, status: "In progress", totalSteps: p.total, completedSteps: p.uploaded)
+                return UploadViewState(id: $0.id, status: "In progress", totalSteps: p.total, completedSteps: p.uploaded)
             }
             
             return $0

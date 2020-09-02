@@ -33,20 +33,5 @@ extension JSONEncodable {
     }
 }
 
-// MARK:- IgnorableResult
-struct IgnorableResult {}
-
-extension IgnorableResult: Codable {}
-
-extension IgnorableResult: JSONDecodable {
-    static func decode(_ data: Data?, decoder: JSONDecoder) throws -> Self {
-        return IgnorableResult()
-    }
-    
-    static func decode(_ data: Data, decoder: JSONDecoder) throws -> Self {
-        return IgnorableResult()
-    }
-}
-
 
 

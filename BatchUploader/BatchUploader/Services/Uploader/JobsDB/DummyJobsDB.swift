@@ -1,21 +1,13 @@
-//
-//  DummyJobsDB.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 16.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import Foundation
 
 final class DummyJobsDB: JobsDBProvider {
     
-    func createJob(id: String, steps: [Int]) throws {
+    func createJob(id: Int, steps: [Int]) throws {
         print("created job \(id), steps \(steps)")
         jobs[id] = JobStatus(id: id, completed: [], remaining: steps)
     }
     
-    func markStepCompleted(_ step: Int, forJob id: String) throws {
+    func markStepCompleted(_ step: Int, forJob id: Int) throws {
         try performWithLock {
             guard let job = jobs[id] else { throw JobDBErr.jobNotFound(id: id) }
             guard let index = job.remaining.firstIndex(of: step) else { throw JobDBErr.stepNotFound(job: id, step: step) }
@@ -32,14 +24,14 @@ final class DummyJobsDB: JobsDBProvider {
         }
     }
     
-    func completeJob(id: String) throws {
+    func completeJob(id: Int) throws {
         try performWithLock {
             print("job \(id) completed")
             jobs.removeValue(forKey: id)
         }
     }
     
-    func getJobStatus(id: String) throws -> JobStatus {
+    func getJobStatus(id: Int) throws -> JobStatus {
         guard let job = jobs[id] else { throw JobDBErr.jobNotFound(id: id) }
         return job
     }
@@ -56,6 +48,6 @@ final class DummyJobsDB: JobsDBProvider {
         try fn()
     }
     
-    private var jobs = [String: JobStatus]()
+    private var jobs = [Int: JobStatus]()
     private let lock = NSLock()
 }

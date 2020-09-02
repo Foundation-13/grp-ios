@@ -1,18 +1,10 @@
-//
-//  UploadsDB.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 14.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import Foundation
 import GRDB
 
 // MARK:- JobsDBProvider
 
 extension DatabaseWrapper: JobsDBProvider {
-    func createJob(id: String, steps: [Int]) throws {
+    func createJob(id: Int, steps: [Int]) throws {
         try dbQueue.write { db in
             try db.execute(
                 sql: "INSERT INTO upload_jobs(job_id, created) VALUES(?, ?)",
@@ -26,7 +18,7 @@ extension DatabaseWrapper: JobsDBProvider {
         }
     }
     
-    func markStepCompleted(_ step: Int, forJob id: String) throws {
+    func markStepCompleted(_ step: Int, forJob id: Int) throws {
         try dbQueue.write{ db in
             try db.execute(
                 sql: "UPDATE upload_job_steps SET completed = true WHERE job_id = :job_id AND step = :step",
@@ -34,7 +26,7 @@ extension DatabaseWrapper: JobsDBProvider {
         }
     }
     
-    func getJobStatus(id: String) throws -> JobStatus {
+    func getJobStatus(id: Int) throws -> JobStatus {
         return try dbQueue.read { (db) -> JobStatus in
             let completedRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = true", arguments: [id])
             let remainingRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = false", arguments: [id])
@@ -46,7 +38,7 @@ extension DatabaseWrapper: JobsDBProvider {
         }
     }
     
-    func completeJob(id: String) throws {
+    func completeJob(id: Int) throws {
         try dbQueue.write { (db) in
             try db.execute(sql: "DELETE FROM upload_job_steps WHERE job_id = ?", arguments: [id])
             try db.execute(sql: "DELETE FROM upload_jobs WHERE job_id = ?", arguments: [id])
@@ -57,7 +49,7 @@ extension DatabaseWrapper: JobsDBProvider {
         return try dbQueue.read { (db) -> [JobStatus] in
             let jobs = try Row.fetchAll(db, sql: "SELECT job_id FROM upload_jobs", arguments: [])
             return try jobs.map { (row) throws -> JobStatus in
-                let id: String = row["job_id"]
+                let id: Int = row["job_id"]
                 
                 let completedRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = true", arguments: [id])
                 let remainingRows = try Row.fetchAll(db, sql: "SELECT step FROM upload_job_steps WHERE job_id = ? AND completed = false", arguments: [id])

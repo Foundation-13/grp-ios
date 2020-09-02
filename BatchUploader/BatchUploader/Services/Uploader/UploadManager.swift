@@ -1,11 +1,3 @@
-//
-//  UploadManager.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 14.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import UIKit
 import Combine
 import PromiseKit
@@ -48,7 +40,7 @@ final class UploadManager {
         }
     }
     
-    private func prepareFolderForJob(id: String, images: [UIImage]) -> Promise<Void> {
+    private func prepareFolderForJob(id: Int, images: [UIImage]) -> Promise<Void> {
         return Promise().then(on: bgq) { _ -> Promise<Void> in
             self.updateProgress(.starting(id))
             
@@ -68,14 +60,14 @@ final class UploadManager {
         }
     }
     
-    private func saveJob(id: String, steps: [Int]) -> Promise<Void> {
+    private func saveJob(id: Int, steps: [Int]) -> Promise<Void> {
         return Promise { seal in
             try self.jobsDB.createJob(id: id, steps: steps)
             seal.fulfill(())
         }
     }
     
-    private func startJob(id: String, steps: [Int]) -> Promise<Void> {
+    private func startJob(id: Int, steps: [Int]) -> Promise<Void> {
         return Promise { seal in
             for indx in steps {
                 let operation = UploadOperation(jobId: id, index: indx, storage: storage, db: jobsDB, api: api)

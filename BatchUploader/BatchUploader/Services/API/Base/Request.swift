@@ -72,19 +72,15 @@ class JsonRequest<T: JSONEncodable>: BaseRequest {
 
 // MARK:- upload file request
 class UploadRequest: BaseRequest {
-    init(endpoint: String, method: HTTPMethod, data: Data, name: String, fileName: String? = nil, mimeType: String? = nil, parameters: Parameters = [:], auth: RequestAuthType = .bearer, hostProvider: HostProvider = DefaultHostProvider()) {
+    init(endpoint: String, method: HTTPMethod, data: Data, name: String, parameters: Parameters = [:], auth: RequestAuthType = .bearer, hostProvider: HostProvider = DefaultHostProvider()) {
         
         self.data = data
         self.name = name
-        self.fileName = fileName
-        self.mimeType = mimeType
         
         super.init(endpoint: endpoint, method: method, parameters: parameters, auth: auth, hostProvider: hostProvider)
     }
     
     let data: Data
     let name: String
-    let fileName: String?
-    let mimeType: String?
 }
 

@@ -1,17 +1,9 @@
-//
-//  UploadOperation.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 14.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import Foundation
 import PromiseKit
 
 final class UploadOperation: Operation {
 
-    init(jobId: String, index: Int, storage: StorageProviver, db: JobsDBProvider, api: UploadAPIProvider) {
+    init(jobId: Int, index: Int, storage: StorageProviver, db: JobsDBProvider, api: UploadAPIProvider) {
         self.jobId = jobId
         self.index = index
         self.storage = storage
@@ -41,7 +33,7 @@ final class UploadOperation: Operation {
         }
     }
     
-    private let jobId: String
+    private let jobId: Int
     private let index: Int
     private let storage: StorageProviver
     private let db: JobsDBProvider

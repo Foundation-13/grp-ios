@@ -66,7 +66,7 @@ final class ServicesAssemble {
     }
     
     private lazy var imageUploadAPI: UploadAPIProvider = {
-        return DummyUploadAPI()
+        return UploadAPIAdapter(review: review)
     }()
     
     private lazy var database: DatabaseWrapper = {

@@ -1,0 +1,6 @@
+framework module Pods_BatchUploaderTests {
+  umbrella header "Pods-BatchUploaderTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,11 +1,3 @@
-//
-//  UploadProvider.swift
-//  BatchUploader
-//
-//  Created by Eugen Fedchenko on 17.08.2020.
-//  Copyright © 2020 Eugen Fedchenko. All rights reserved.
-//
-
 import UIKit
 import Combine
 import PromiseKit
@@ -15,25 +7,25 @@ enum UploadErr: Error {
 }
 
 struct UploadProgress {
-    let id: String
+    let id: Int
     let total: Int
     let uploaded: Int
 }
 
 enum UploadEvent {
-    case starting(String)
-    case started(String)
+    case starting(Int)
+    case started(Int)
     case progress(UploadProgress)
-    case completed(String)
-    case failed(String, UploadErr)
+    case completed(Int)
+    case failed(Int, UploadErr)
 }
 
 protocol UploadAPIProvider {
-    func uploadImage(_ data: Data, index: Int, forJob id: String) -> Promise<Void>
-    func completeJob(id: String) -> Promise<Void>
+    func uploadImage(_ data: Data, index: Int, forJob id: Int) -> Promise<Void>
+    func completeJob(id: Int) -> Promise<Void>
 }
 
-typealias UploadStarterFn = () -> Promise<String>
+typealias UploadStarterFn = () -> Promise<Int>
 
 
 protocol UploadProvider {

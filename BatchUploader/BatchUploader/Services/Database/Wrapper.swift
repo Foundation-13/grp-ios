@@ -28,13 +28,13 @@ final class DatabaseWrapper {
         
             migrator.registerMigration("v1") { db in
                 try db.create(table: "upload_jobs") { t in
-                    t.column("job_id", .text).notNull()
+                    t.column("job_id", .integer).notNull()
                     t.column("created", .datetime).notNull()
                     t.primaryKey(["job_id"])
                 }
                 
                 try db.create(table: "upload_job_steps") { t in
-                    t.column("job_id", .text).notNull()
+                    t.column("job_id", .integer).notNull()
                     t.column("step", .integer).notNull()
                     t.column("completed", .boolean).notNull()
                     t.uniqueKey(["job_id", "step"])

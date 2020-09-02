@@ -9,13 +9,13 @@
 import Foundation
 
 enum JobDBErr: Error {
-    case jobNotFound(id: String)
-    case stepNotFound(job: String, step: Int)
+    case jobNotFound(id: Int)
+    case stepNotFound(job: Int, step: Int)
     case dbError(Error)
 }
 
 struct JobStatus {
-    let id: String
+    let id: Int
     let completed: [Int]
     let remaining: [Int]
     
@@ -28,12 +28,12 @@ struct JobStatus {
 }
 
 protocol JobsDBProvider {
-    func createJob(id: String, steps: [Int]) throws
+    func createJob(id: Int, steps: [Int]) throws
     
-    func markStepCompleted(_ step: Int, forJob id: String) throws
-    func getJobStatus(id: String) throws -> JobStatus
+    func markStepCompleted(_ step: Int, forJob id: Int) throws
+    func getJobStatus(id: Int) throws -> JobStatus
     
-    func completeJob(id: String) throws
+    func completeJob(id: Int) throws
     
     func getActiveJobs() throws -> [JobStatus]
 }

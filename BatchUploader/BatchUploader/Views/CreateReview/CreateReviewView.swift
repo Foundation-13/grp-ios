@@ -39,7 +39,7 @@ struct CreateReviewView: View {
 }
 
 struct CreateReviewView_Previews: PreviewProvider {
-    static let model = CreateReviewModel(place: Places.Place.make(title: "Cool bar", vicinity: "23, Ave, Seattle"))
+    static let model = CreateReviewModel(place: Places.Place.make(title: "Cool bar", vicinity: "23, Ave, Seattle"), images: [])
     
     static var previews: some View {
         CreateReviewView(model: model, isActive: .constant(true))
