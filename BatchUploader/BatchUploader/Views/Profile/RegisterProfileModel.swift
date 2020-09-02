@@ -44,6 +44,7 @@ final class RegisterProfileModel: ObservableObject {
             profileProvider.updateAvatar(image: avatarImage)
         }.done {
             print("profile updated")
+            self.isProfileRegistered = true
         }.ensure {
             self.isLoading = false
         }
